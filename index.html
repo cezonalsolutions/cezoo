@@ -2425,6 +2425,127 @@ position:relative;
 
   word-break:break-word;
 }
+
+/* MAIN SECTION */
+.brands-section{
+    width:100%;
+    padding:16px 0 28px 10px;
+}
+
+.brands-title{
+    font-size:26px;
+    font-weight:800;
+    color:#20212b;
+    margin-bottom:14px;
+}
+
+/* HORIZONTAL SCROLL ROW */
+.brands-scroll{
+    width:100%;
+    display:flex;
+    flex-wrap:nowrap;
+    gap:9px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-behavior:smooth;
+    padding-right:10px;
+    padding-bottom:5px;
+    margin-bottom:12px;
+}
+
+/* HIDE SCROLLBAR */
+.brands-scroll::-webkit-scrollbar{
+    display:none;
+}
+
+.brands-scroll{
+    scrollbar-width:none;
+}
+
+/* CARD */
+.brand-card{
+    flex:0 0 104px;
+    height:132px;
+    border:1.6px solid #111;
+    border-radius:14px;
+    overflow:hidden;
+    background:#0A3D62;
+}
+
+/* PRODUCT IMAGE AREA */
+.product-area{
+    width:100%;
+    height:94px;
+    background: #EAF4FB;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    padding:7px 6px 0;
+}
+
+.product-area img{
+    max-width:100%;
+    max-height:84px;
+    object-fit:contain;
+    display:block;
+}
+
+/* LOGO AREA */
+.logo-area{
+    width:100%;
+    height:38px;
+    background:#fff6f3;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:4px 7px;
+}
+
+.logo-area img{
+    max-width:90%;
+    max-height:28px;
+    object-fit:contain;
+    display:block;
+}
+
+/* EXTRA SMALL MOBILE */
+@media(max-width:360px){
+    .brands-section{
+        padding-left:9px;
+    }
+
+    .brands-title{
+        font-size:24px;
+        margin-bottom:13px;
+    }
+
+    .brands-scroll{
+        gap:8px;
+        margin-bottom:11px;
+    }
+
+    .brand-card{
+        flex:0 0 98px;
+        height:126px;
+        border-radius:13px;
+    }
+
+    .product-area{
+        height:90px;
+    }
+
+    .product-area img{
+        max-height:80px;
+    }
+
+    .logo-area{
+        height:36px;
+    }
+
+    .logo-area img{
+        max-height:26px;
+    }
+}
 </style>
 </head>
 
@@ -2625,6 +2746,91 @@ position:relative;
   <span class="seeAllArrow">›</span>
 </div>
     
+<section class="brands-section">
+
+    <h1 class="brands-title"></h1>
+
+    <!-- ROW 1 -->
+    <div class="brands-scroll">
+
+        <div class="brand-card">
+            <div class="product-area">
+                <img src="vijay/image2.png" alt="Coca Cola">
+            </div>
+            <div class="logo-area">
+                <img src="vijay/image1down.png" alt="Coca Cola Logo">
+            </div>
+        </div>
+
+        <div class="brand-card">
+            <div class="product-area">
+                <img src="vijay/lays.png" alt="Lays">
+            </div>
+            <div class="logo-area">
+                <img src="vijay/laysdown.png" alt="Lays Logo">
+            </div>
+        </div>
+ <div class="brand-card">
+            <div class="product-area">
+                <img src="vijay/kur.png" alt="Fabelle">
+            </div>
+            <div class="logo-area">
+                <img src="vijay/kurdown.png" alt="Fabelle Logo">
+            </div>
+        </div>
+        <div class="brand-card">
+            <div class="product-area">
+                <img src="vijay/bingo.png" alt="Cookies">
+            </div>
+            <div class="logo-area">
+                <img src="vijay/bingodown.png" alt="Bakers Dozen Logo">
+            </div>
+        </div>
+
+        <div class="brand-card">
+            <div class="product-area">
+                <img src="vijay/milk.png" alt="Bingo">
+            </div>
+            <div class="logo-area">
+                <img src="vijay/milkdown.png" alt="Bingo Logo">
+            </div>
+        </div>
+
+        <div class="brand-card">
+            <div class="product-area">
+                <img src="vijay/kit.png" alt="Havmor">
+            </div>
+            <div class="logo-area">
+                <img src="vijay/kitdown.png" alt="Havmor Logo">
+            </div>
+        </div>
+ <div class="brand-card">
+            <div class="product-area">
+                <img src="vijay/oreo.png" alt="KitKat">
+            </div>
+            <div class="logo-area">
+                <img src="vijay/oreodown.png" alt="KitKat Logo">
+            </div>
+        </div>
+    </div>
+
+    <!-- ROW 2 -->
+   
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   </div>
 
 
