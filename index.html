@@ -25,7 +25,7 @@ html, body {
   overflow-y: auto;
 }
 #contentArea{
-  min-height:300vh;
+  min-height:204vh;
 }
 .page {
   min-height: 100vh;
@@ -4874,7 +4874,7 @@ function renderFreshProducts(products){
           loading="lazy"
         >
 
-      <button class="addBtn" onclick="event.stopPropagation(); showQty(this)">
+      <button class="addBtn" onclick="return showQty(event,this)">
   <span>+</span>
 </button>
 
@@ -5011,7 +5011,7 @@ function renderLaunchProducts(products){
           loading="lazy"
         >
 
-        <button class="addBtn" onclick="event.stopPropagation(); showQty(this)">
+        <button class="addBtn" onclick="return showQty(event,this)">
           <span>+</span>
         </button>
 
@@ -5044,55 +5044,63 @@ document.addEventListener("DOMContentLoaded", () => {
     loadLaunchProducts("fruits", defaultLaunch);
   }
 });
-function showQty(btn){
+function showQty(e, btn){
+
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
 
   btn.classList.add("qtyMode");
 
   btn.innerHTML = `
-    <button onclick="decreaseQty(event,this)">−</button>
+    <button onclick="return decreaseQty(event,this)">−</button>
     <span class="qty">1</span>
-    <button onclick="increaseQty(event,this)">+</button>
+    <button onclick="return increaseQty(event,this)">+</button>
   `;
+
+  return false;
 }
 
-function increaseQty(e,btn){
+function increaseQty(e, btn){
+
+  e.preventDefault();
   e.stopPropagation();
+  e.stopImmediatePropagation();
 
-  const qty =
-  btn.parentElement.querySelector(".qty");
+  const qty = btn.parentElement.querySelector(".qty");
+  qty.innerText = Number(qty.innerText) + 1;
 
-  qty.innerText =
-  Number(qty.innerText)+1;
+  return false;
 }
 
-function decreaseQty(e,btn){
+function decreaseQty(e, btn){
+
+  e.preventDefault();
   e.stopPropagation();
+  e.stopImmediatePropagation();
 
   const addBtn = btn.parentElement;
+  const qty = addBtn.querySelector(".qty");
 
-  const qty =
-  addBtn.querySelector(".qty");
-
-  let count =
-  Number(qty.innerText);
+  let count = Number(qty.innerText);
 
   if(count > 1){
-
-    qty.innerText = count-1;
-
+    qty.innerText = count - 1;
   }else{
-
     addBtn.classList.remove("qtyMode");
 
-    addBtn.innerHTML =
-    `<span>+</span>`;
+    addBtn.innerHTML = `<span>+</span>`;
 
     addBtn.setAttribute(
       "onclick",
-      "showQty(this)"
+      "return showQty(event,this)"
     );
   }
+
+  return false;
 }
+
+
 
 function openProductPopup(product){
 
@@ -5375,7 +5383,7 @@ async function loadAutoProductRow(row){
         >
 
         <button class="addBtn"
-          onclick="event.stopPropagation(); showQty(this)">
+          onclick="return showQty(event,this)">
           <span>+</span>
         </button>
 
@@ -5447,6 +5455,7 @@ document.body.addEventListener("scroll", () => {
 
   lastScroll = now;
 });
+
 </script>
 
 </body>
