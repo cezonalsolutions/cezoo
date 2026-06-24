@@ -2159,40 +2159,58 @@ position:relative;
 .productPopup{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.35);
+
+  background:#fff;
   z-index:99999;
 
   display:none;
-  align-items:flex-end;
+
+  overflow:hidden;
 }
 
 .productPopup.open{
-  display:flex;
+  display:block;
 }
 
 .productPopupBox{
   width:100%;
+  height:100vh;
+
   background:#fff;
-  border-radius:22px 22px 0 0;
-  padding:16px 0 24px;
+
+  border-radius:0;
+
+  padding:16px 0 80px;
+
   position:relative;
+
+  overflow-y:auto;
+  overflow-x:hidden;
+
+  -webkit-overflow-scrolling:touch;
+}
+
+.productPopupBox::-webkit-scrollbar{
+  display:none;
 }
 
 .popupClose{
-  position:absolute;
-  top:10px;
+  position:fixed;
+  top:14px;
   right:14px;
 
-  width:32px;
-  height:32px;
+  width:34px;
+  height:34px;
 
   border:none;
   border-radius:50%;
+
   background:#f3f4f6;
 
-  font-size:22px;
+  font-size:24px;
   line-height:1;
-  z-index:2;
+
+  z-index:100000;
 }
 
 .popupImageScroll{
@@ -2300,8 +2318,22 @@ position:relative;
 }
 
 .popupDiscountPrice{
-  font-size:22px;
-  font-weight:900;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  height:30px;
+
+  padding:0 10px;
+
+  background:#f5f6f7;
+
+  border:1px solid #ececec;
+
+  border-radius:8px;
+
+  font-size:16px;
+  font-weight:800;
 
   color:#111;
 }
@@ -2329,6 +2361,62 @@ position:relative;
   font-weight:700;
 
   cursor:pointer;
+}
+.popupSectionTitle{
+  padding:22px 16px 0;
+
+  font-size:16px;
+  font-weight:800;
+
+  color:#111;
+
+  text-align:left;
+}
+.popupLongDesc{
+  padding:18px 16px 0;
+
+  font-size:14px;
+  line-height:1.7;
+
+  color:#444;
+
+  text-align:left;
+
+  white-space:pre-line;
+}
+.sellerTable{
+  padding:12px 16px 24px;
+}
+
+.sellerRow{
+  display:flex;
+  align-items:flex-start;
+
+  padding:10px 0;
+
+  border-bottom:1px solid #f1f1f1;
+}
+
+.sellerLabel{
+  width:120px;
+
+  font-size:13px;
+  font-weight:700;
+
+  color:#666;
+
+  flex-shrink:0;
+}
+
+.sellerValue{
+  flex:1;
+
+  font-size:13px;
+  line-height:1.5;
+
+  color:#111;
+
+  word-break:break-word;
 }
 </style>
 </head>
@@ -3039,7 +3127,41 @@ position:relative;
   </button>
 
 </div>
+<div class="popupSectionTitle">
+  Product Details
+</div>
+
+<div id="popupLongDesc"
+     class="popupLongDesc">
+    </div>
+
+    <div class="popupSectionTitle">
+  Seller Details
+</div>
+
+<div class="sellerTable">
+
+  <div class="sellerRow">
+    <div class="sellerLabel">Seller Name</div>
+    <div id="popupSellerName" class="sellerValue"></div>
   </div>
+
+  <div class="sellerRow">
+    <div class="sellerLabel">FSSAI Number</div>
+    <div id="popupFssai" class="sellerValue"></div>
+  </div>
+
+  <div class="sellerRow">
+    <div class="sellerLabel">Seller Address</div>
+    <div id="popupSellerAddress" class="sellerValue"></div>
+  </div>
+
+  <div class="sellerRow">
+    <div class="sellerLabel">Customer Care</div>
+    <div id="popupCustomerCare" class="sellerValue"></div>
+  </div>
+
+</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -3772,6 +3894,19 @@ document.getElementById("popupDiscountPrice").innerText =
 
 document.getElementById("popupOriginalPrice").innerText =
 `₹${product.original_price || 0}`;
+document.getElementById("popupLongDesc").innerText =
+product.long_desc || "";
+document.getElementById("popupSellerName").innerText =
+product.seller_name || "";
+
+document.getElementById("popupFssai").innerText =
+product.fssai_number || "";
+
+document.getElementById("popupSellerAddress").innerText =
+product.seller_address || "";
+
+document.getElementById("popupCustomerCare").innerText =
+product.customer_care || "";
   popup.classList.add("open");
 
   imageBox.onscroll = () => {
