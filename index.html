@@ -2429,7 +2429,7 @@ position:relative;
 /* MAIN SECTION */
 .brands-section{
     width:100%;
-    padding:16px 0 28px 10px;
+    padding:16px 0 8px 10px;
 }
 
 .brands-title{
@@ -2571,6 +2571,341 @@ position:relative;
 
   line-height:1.4;
 }
+
+.poster{
+    width:100%;
+    max-width:none;
+    background:linear-gradient(135deg,#fff1a8 0%,#ffd98a 55%,#ffc071 100%);
+    border-radius:0;
+    overflow:hidden;
+    padding:14px 12px 14px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* TOP AREA */
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:8px;
+}
+
+.title{
+    width:62%;
+}
+
+.title h1{
+    font-family:Georgia, serif;
+
+    color:#f06b3c;
+
+    font-size:36px;
+
+    line-height:0.95;
+
+    font-weight:900;
+
+    margin:0;
+}
+/* HERO IMAGE - NO CURVE */
+.hero-img{
+    width:90px;
+    height:90px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-shrink:0;
+}
+
+.hero-img img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:0;
+}
+
+/* BRAND ROW */
+.brand-row{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-top:12px;
+    margin-bottom:15px;
+    font-size:10px;
+    color:#5e4332;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.brand-icons{
+    display:flex;
+    gap:5px;
+}
+
+/* BIG BRAND IMAGES - NO CURVE */
+.brand-icons img{
+    width:32px;
+    height:32px;
+    
+    padding:3px;
+    object-fit:contain;
+    border-radius:0;
+}
+
+/* PRODUCT GRID */
+.product-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    grid-template-rows:132px 132px;
+    gap:8px;
+}
+
+/* CARD CORNERS ONLY */
+.card{
+    background:#fffaf0;
+    border-radius:18px;
+    overflow:hidden;
+    position:relative;
+    padding:7px;
+    box-shadow:0 3px 8px rgba(0,0,0,0.08);
+}
+
+.big-card{
+    grid-row:span 2;
+    border-radius:20px;
+}
+
+.card h2{
+    text-align:center;
+    color:#8a3038;
+    font-size:14px;
+    line-height:1.15;
+    margin-bottom:5px;
+    font-weight:900;
+}
+
+.small-card h2{
+    font-size:11px;
+    white-space:nowrap;
+}
+
+.product-img{
+    width:100%;
+    height:70%;
+    display:flex;
+    justify-content:center;
+    align-items:flex-end;
+}
+
+/* SMALL PRODUCT IMAGES - NO CURVE */
+.product-img img{
+    width:82%;
+    height:82%;
+    object-fit:contain;
+    border-radius:0;
+}
+
+.big-card .product-img{
+    height:68%;
+}
+
+.big-card .product-img img{
+    width:88%;
+    height:88%;
+    border-radius:0;
+}
+
+/* PRICE BADGE */
+.price-badge{
+    position:absolute;
+    left:0;
+    bottom:0;
+    background:#d95a32;
+    color:#fff;
+    padding:6px 8px;
+    border-radius:0 10px 0 0;
+    font-size:8px;
+    line-height:1.1;
+}
+
+.price-badge strong{
+    display:block;
+    font-size:16px;
+    line-height:1.1;
+}
+
+/* ROUND PRICE BADGE */
+.round-price{
+    position:absolute;
+
+    right:8px;
+    bottom:24px;
+
+    width:68px;
+    height:68px;
+    background:#c9c9c9;
+
+   
+    color:#8a3038;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    font-weight:900;
+
+    z-index:5;
+
+    filter:drop-shadow(0 2px 4px rgba(0,0,0,.10));
+
+    clip-path:polygon(
+      50% 0%,
+      56% 7%,
+      63% 2%,
+      68% 10%,
+      76% 5%,
+      80% 14%,
+      89% 12%,
+      90% 22%,
+      98% 26%,
+      93% 35%,
+      100% 42%,
+      92% 50%,
+      100% 58%,
+      93% 65%,
+      98% 74%,
+      89% 78%,
+      90% 88%,
+      80% 86%,
+      76% 95%,
+      68% 90%,
+      63% 98%,
+      56% 93%,
+      50% 100%,
+      44% 93%,
+      37% 98%,
+      32% 90%,
+      24% 95%,
+      20% 86%,
+      10% 88%,
+      11% 78%,
+      2% 74%,
+      7% 65%,
+      0% 58%,
+      8% 50%,
+      0% 42%,
+      7% 35%,
+      2% 26%,
+      10% 22%,
+      11% 12%,
+      20% 14%,
+      24% 5%,
+      32% 10%,
+      37% 2%,
+      44% 7%
+    );
+}
+
+.round-price::before{
+    content:"";
+    position:absolute;
+    inset:4px;
+
+   
+
+    z-index:-1;
+
+    clip-path:inherit;
+}
+
+.round-price del{
+    color:#8a3038;
+    font-size:13px;
+    font-weight:700;
+    line-height:1;
+}
+
+.round-price span{
+    color:#8a3038;
+    font-size:20px;
+    font-weight:900;
+    line-height:1;
+    margin-top:2px;
+}
+
+/* SMALL MOBILE FIX */
+@media(max-width:360px){
+    .poster{
+        padding:12px 10px 12px;
+        border-radius:0;
+    }
+
+    .title h1{
+        font-size:27px;
+    }
+
+    .hero-img{
+        width:78px;
+        height:78px;
+    }
+
+    .brand-row{
+        font-size:8px;
+        gap:4px;
+    }
+
+    .brand-icons img{
+        width:28px;
+        height:28px;
+        border-radius:0;
+    }
+
+    .product-grid{
+        grid-template-rows:120px 120px;
+        gap:7px;
+    }
+
+    .card{
+        border-radius:16px;
+        padding:6px;
+    }
+
+    .card h2{
+        font-size:13px;
+    }
+
+    .small-card h2{
+        font-size:10px;
+    }
+
+    .product-img img{
+        width:78%;
+        height:78%;
+        border-radius:0;
+    }
+
+    .big-card .product-img img{
+        width:84%;
+        height:84%;
+        border-radius:0;
+    }
+
+    .price-badge strong{
+        font-size:14px;
+    }
+
+    .round-price{
+        width:50px;
+        height:50px;
+        font-size:14px;
+    }
+
+    .round-price del{
+        font-size:13px;
+    }
+}
+
 </style>
 </head>
 
@@ -2958,6 +3293,108 @@ position:relative;
 </div>
 
 <div id="launchProductsRow"></div>
+<div class="poster">
+
+    <!-- TOP TITLE + IMAGE -->
+    <div class="top">
+        <div class="title">
+            <h1>Hot Sips &<br>Snack Fest</h1>
+        </div>
+
+        <div class="hero-img">
+            <img src="images/1.png" alt="Hot Sips">
+        </div>
+    </div>
+
+    <!-- BRAND LOGOS -->
+    <div class="brand-row">
+        <span>Powered By</span>
+
+        <div class="brand-icons">
+            <img src="images/lays.png" alt="">
+            <img src="images/6.png" alt="">
+            <img src="images/7.png" alt="">
+        </div>
+
+        <span style="margin-left:4px;">Co Powered By</span>
+
+        <div class="brand-icons">
+            <img src="images/3.png" alt="">
+           
+        </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="product-grid">
+
+        <div class="card big-card">
+            <h2>Sip<br>Specials</h2>
+
+            <div class="product-img">
+                <img src="images/8.png" alt="Red Label">
+            </div>
+
+            <div class="round-price">
+                <del>₹560</del>
+                ₹449
+            </div>
+        </div>
+
+        <div class="card small-card">
+            <h2>Hot Sips & Mixes</h2>
+
+            <div class="product-img">
+                <img src="images/2.png" alt="">
+            </div>
+
+            <div class="price-badge">
+                Starts at
+                <strong>₹40</strong>
+            </div>
+        </div>
+
+        <div class="card small-card">
+            <h2>Frozen Bites</h2>
+
+            <div class="product-img">
+                <img src="images/tag.png" alt="">
+            </div>
+
+            <div class="price-badge">
+                Starts at
+                <strong>₹129</strong>
+            </div>
+        </div>
+
+        <div class="card small-card">
+            <h2>Munch & Slurp</h2>
+
+            <div class="product-img">
+                <img src="images/4.png" alt="">
+            </div>
+
+            <div class="price-badge">
+                Starts at
+                <strong>₹16</strong>
+            </div>
+        </div>
+
+        <div class="card small-card">
+            <h2>Cookies & Cakes</h2>
+
+            <div class="product-img">
+                <img src="images/5.png" alt="">
+            </div>
+
+            <div class="price-badge">
+                Starts at
+                <strong>₹15</strong>
+            </div>
+        </div>
+
+    </div>
+
+</div>
 
 
   </div>
