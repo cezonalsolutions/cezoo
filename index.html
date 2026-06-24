@@ -1848,7 +1848,6 @@ position:relative;
 
 .addBtn{
   position:absolute;
-
   right:2px;
   bottom:2px;
 
@@ -1856,33 +1855,74 @@ position:relative;
   height:32px;
 
   border:1px solid #dff5e8;
-
   border-radius:10px;
 
   background:#f8fffb;
-
   color:#0BD957;
-
-  font-size:18px;
-  font-weight:600;
 
   display:flex;
   align-items:center;
   justify-content:center;
 
-  line-height:1;
-
   cursor:pointer;
-
   box-shadow:0 1px 3px rgba(0,0,0,.04);
 
   padding:0;
+  line-height:1;
+
+  transition:.2s ease;
 }
 
 .addBtn span{
-  transform:translateY(-1px);
+  font-size:18px;
+  font-weight:700;
+  line-height:1;
 }
 
+/* after click */
+.addBtn.qtyMode{
+  width:70px;
+
+  justify-content:space-between;
+  padding:0 7px;
+}
+
+.addBtn.qtyMode button{
+  width:18px;
+  height:18px;
+
+  border:none;
+  background:none;
+
+  color:#0BD957;
+
+  font-size:18px;
+  font-weight:800;
+  line-height:18px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+  margin:0;
+
+  cursor:pointer;
+}
+
+.addBtn.qtyMode .qty{
+  min-width:14px;
+
+  color:#111;
+
+  font-size:13px;
+  font-weight:800;
+  line-height:1;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 .productInfo{
   text-align:left;
   padding-left:3px;
@@ -2116,6 +2156,253 @@ position:relative;
 #launchProductsRow::-webkit-scrollbar{
   display:none;
 }
+
+#smallHotPoster,
+#smallHotPoster *,
+#smallHotPoster *::before,
+#smallHotPoster *::after{
+    box-sizing:border-box !important;
+    animation:none !important;
+    transition:none !important;
+    transform:none !important;
+    scale:1 !important;
+}
+
+#smallHotPoster{
+    width:min(360px, calc(100vw - 24px)) !important;
+    height:auto !important;
+    margin:12px auto !important;
+    padding:10px !important;
+    border-radius:22px !important;
+    overflow:hidden !important;
+    background:linear-gradient(135deg,#f8df9d,#f2c06c) !important;
+    font-family:Arial, sans-serif !important;
+    position:relative !important;
+    isolation:isolate !important;
+    contain:layout paint style !important;
+}
+
+#smallHotPoster img{
+    max-width:none !important;
+    transform:none !important;
+    animation:none !important;
+    transition:none !important;
+}
+
+#smallHotPoster:hover,
+#smallHotPoster:hover *,
+#smallHotPoster img:hover{
+    transform:none !important;
+    animation:none !important;
+    transition:none !important;
+    scale:1 !important;
+}
+
+#smallHotPoster .poster-top{
+    display:flex !important;
+    justify-content:space-between !important;
+    align-items:flex-start !important;
+    gap:6px !important;
+}
+
+#smallHotPoster .poster-title h2{
+    margin:0 !important;
+    font-size:26px !important;
+    line-height:1 !important;
+    color:#d66b3d !important;
+    font-weight:900 !important;
+}
+
+#smallHotPoster .poster-icon img{
+    width:68px !important;
+    height:68px !important;
+    object-fit:contain !important;
+    display:block !important;
+}
+
+#smallHotPoster .poster-sponsors{
+    margin-top:8px !important;
+    display:flex !important;
+    flex-wrap:wrap !important;
+    gap:5px !important;
+    align-items:center !important;
+}
+
+#smallHotPoster .poster-sponsors span{
+    font-size:9px !important;
+    font-weight:700 !important;
+    color:#5b4b3a !important;
+    white-space:nowrap !important;
+}
+
+#smallHotPoster .poster-sponsors img{
+    width:32px !important;
+    height:22px !important;
+    object-fit:contain !important;
+    display:block !important;
+    background:#fff !important;
+    border-radius:6px !important;
+    padding:3px !important;
+}
+
+#smallHotPoster .poster-products{
+    margin-top:10px !important;
+    display:grid !important;
+    grid-template-columns:1fr 1.55fr !important;
+    gap:7px !important;
+}
+
+#smallHotPoster .poster-big-card{
+    background:#fffaf0 !important;
+    border-radius:16px !important;
+    padding:7px !important;
+    min-height:150px !important;
+    position:relative !important;
+    text-align:center !important;
+    overflow:hidden !important;
+}
+
+#smallHotPoster .poster-big-card h3{
+    margin:0 0 4px !important;
+    font-size:14px !important;
+    color:#803f3f !important;
+}
+
+#smallHotPoster .poster-big-card img{
+    width:100% !important;
+    height:78px !important;
+    object-fit:contain !important;
+    display:block !important;
+}
+
+#smallHotPoster .poster-price{
+    position:absolute !important;
+    right:6px !important;
+    bottom:6px !important;
+    width:50px !important;
+    height:50px !important;
+    background:#fff !important;
+    border-radius:50% !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    align-items:center !important;
+    box-shadow:0 3px 8px rgba(0,0,0,0.12) !important;
+}
+
+#smallHotPoster .poster-old{
+    font-size:10px !important;
+    text-decoration:line-through !important;
+    color:#555 !important;
+}
+
+#smallHotPoster .poster-new{
+    font-size:14px !important;
+    color:#a10037 !important;
+    font-weight:900 !important;
+}
+
+#smallHotPoster .poster-small-cards{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:7px !important;
+}
+
+#smallHotPoster .poster-card{
+    background:#fffaf0 !important;
+    border-radius:14px !important;
+    padding:6px !important;
+    min-height:71px !important;
+    position:relative !important;
+    overflow:hidden !important;
+}
+
+#smallHotPoster .poster-card h4{
+    margin:0 !important;
+    font-size:10px !important;
+    color:#803f3f !important;
+    line-height:1.1 !important;
+    width:68% !important;
+}
+
+#smallHotPoster .poster-card img{
+    position:absolute !important;
+    right:3px !important;
+    bottom:16px !important;
+    width:43px !important;
+    height:36px !important;
+    object-fit:contain !important;
+    display:block !important;
+}
+
+#smallHotPoster .poster-starts{
+    position:absolute !important;
+    left:0 !important;
+    bottom:0 !important;
+    background:#d86a3a !important;
+    color:#fff !important;
+    font-size:8px !important;
+    padding:4px 6px !important;
+    border-top-right-radius:9px !important;
+}
+.poster-food-img{
+    width:150px;
+    height:120px;
+    object-fit:contain;
+    display:block;
+}
+
+/* mobile size */
+@media(max-width:768px){
+    .poster-food-img{
+        width:120px;
+        height:95px;
+    }
+}
+#smallHotPoster .poster-icon{
+    width:78px !important;
+    height:78px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    flex-shrink:0 !important;
+}
+
+#smallHotPoster .circle-food-img{
+    width:76px !important;
+    height:76px !important;
+    border-radius:50% !important;
+    background:#fff !important;
+    overflow:hidden !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    box-shadow:0 4px 12px rgba(0,0,0,0.18) !important;
+}
+
+#smallHotPoster .circle-food-img img{
+    width:125% !important;
+    height:125% !important;
+    object-fit:contain !important;
+    display:block !important;
+}
+
+@media(max-width:768px){
+    #smallHotPoster .poster-icon{
+        width:72px !important;
+        height:72px !important;
+    }
+
+    #smallHotPoster .circle-food-img{
+        width:70px !important;
+        height:70px !important;
+    }
+
+    #smallHotPoster .circle-food-img img{
+        width:125% !important;
+        height:125% !important;
+    }
+}
 </style>
 </head>
 
@@ -2316,6 +2603,74 @@ position:relative;
   <span class="seeAllArrow">›</span>
 </div>
     
+
+
+
+<div id="smallHotPoster">
+
+    <div class="poster-top">
+
+        <div class="poster-title">
+            <h2>Hot Sips &<br>Snack Fest</h2>
+
+            <div class="poster-sponsors">
+                <span>Powered By</span>
+                <img src="images/bingo.webp" alt="">
+                <img src="images/yipee.webp" alt="">
+                <img src="images/lays.webp" alt="">
+                <span>Co Powered By</span>
+                <img src="images/bakers.webp" alt="">
+                <img src="images/sunfeast.webp" alt="">
+            </div>
+        </div>
+
+        <div class="poster-icon">
+    <div class="circle-food-img">
+        <img src="images/top1.webp" alt="Hot snacks">
+    </div>
+</div>
+
+    </div>
+
+    <div class="poster-products">
+
+        <div class="poster-big-card">
+            <h3>Sip Specials</h3>
+            <img src="images/img1.webp" alt="">
+
+            <div class="poster-price">
+                <span class="poster-old">₹560</span>
+                <span class="poster-new">₹449</span>
+            </div>
+        </div>
+
+        <div class="poster-small-cards">
+
+            <div class="poster-card">
+                <h4>Hot Sips & Mixes</h4>
+                <img src="images/tag.webp" alt="">
+                <div class="poster-starts">Starts at ₹40</div>
+            </div>
+
+            <div class="poster-card">
+                <h4>Frozen Bites</h4>
+                <img src="images/fries.webp" alt="">
+                <div class="poster-starts">Starts at ₹129</div>
+            </div>
+
+            <div class="poster-card">
+                <h4>Munch & Slurp</h4>
+                <img src="images/kur.webp" alt="">
+                <div class="poster-starts">Starts at ₹16</div>
+            </div>
+
+            
+
+        </div>
+
+    </div>
+
+</div>
   </div>
 
 
@@ -3264,9 +3619,9 @@ function renderFreshProducts(products){
           loading="lazy"
         >
 
-        <button class="addBtn">
-          <span>+</span>
-        </button>
+       <button class="addBtn" onclick="showQty(this)">
+  <span>+</span>
+</button>
 
       </div>
 
@@ -3401,10 +3756,9 @@ function renderLaunchProducts(products){
           loading="lazy"
         >
 
-        <button class="addBtn">
-          <span>+</span>
-        </button>
-
+      <button class="addBtn" onclick="showQty(this)">
+  <span>+</span>
+</button>
       </div>
 
       <div class="productInfo">
@@ -3433,6 +3787,55 @@ document.addEventListener("DOMContentLoaded", () => {
     loadLaunchProducts("fruits", defaultLaunch);
   }
 });
+function showQty(btn){
+
+  btn.classList.add("qtyMode");
+
+  btn.innerHTML = `
+    <button onclick="decreaseQty(event,this)">−</button>
+    <span class="qty">1</span>
+    <button onclick="increaseQty(event,this)">+</button>
+  `;
+}
+
+function increaseQty(e,btn){
+  e.stopPropagation();
+
+  const qty =
+  btn.parentElement.querySelector(".qty");
+
+  qty.innerText =
+  Number(qty.innerText)+1;
+}
+
+function decreaseQty(e,btn){
+  e.stopPropagation();
+
+  const addBtn = btn.parentElement;
+
+  const qty =
+  addBtn.querySelector(".qty");
+
+  let count =
+  Number(qty.innerText);
+
+  if(count > 1){
+
+    qty.innerText = count-1;
+
+  }else{
+
+    addBtn.classList.remove("qtyMode");
+
+    addBtn.innerHTML =
+    `<span>+</span>`;
+
+    addBtn.setAttribute(
+      "onclick",
+      "showQty(this)"
+    );
+  }
+}
 </script>
 
 </body>
