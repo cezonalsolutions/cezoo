@@ -2034,6 +2034,66 @@ position:relative;
 
   line-height:1;
 }
+.launchRow{
+  display:flex;
+
+  gap:10px;
+
+  overflow-x:auto;
+  overflow-y:hidden;
+
+  padding:8px 12px 14px;
+
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+
+.launchRow::-webkit-scrollbar{
+  display:none;
+}
+
+.launchCard{
+  flex:0 0 68px;
+
+  text-align:center;
+}
+
+.launchCard img{
+  width:68px;
+  height:68px;
+
+  object-fit:contain;
+
+  background:#f7f8fa;
+
+  border:1px solid #ececec;
+
+  border-radius:12px;
+
+  padding:8px;
+
+  box-sizing:border-box;
+}
+
+.launchCard span{
+  display:block;
+
+  margin-top:5px;
+
+  font-size:10px;
+
+  font-weight:700;
+
+  color:#111;
+
+  line-height:1.2;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
 </style>
 </head>
 
@@ -2236,6 +2296,9 @@ position:relative;
     
   </div>
 
+
+
+
   <div class="content-section" data-section="Fresh">
     <div id="freshSection">
   <div class="freshBanner">
@@ -2292,6 +2355,41 @@ position:relative;
 
 </div>
 </div>
+<div class="launchRow">
+
+  <div class="launchCard">
+    <img src="fresh/ornage.webp" alt="">
+    <span>Fruits</span>
+  </div>
+
+  <div class="launchCard">
+    <img src="fresh/magoes.png" alt="">
+    <span>Mangoes</span>
+  </div>
+
+  <div class="launchCard">
+    <img src="fresh/eggs.webp" alt="">
+    <span>Eggs</span>
+  </div>
+
+  <div class="launchCard">
+    <img src="fresh/exoo.png" alt="">
+    <span>Exotics</span>
+  </div>
+
+  <div class="launchCard">
+    <img src="fresh/vegies.png" alt="">
+    <span>Veggies</span>
+  </div>
+
+  <div class="launchCard">
+    <img src="fresh/new.png" alt="">
+    <span>New</span>
+  </div>
+
+</div>
+
+
   </div>
 
   <div class="content-section" data-section="Summer">
