@@ -4614,10 +4614,16 @@ function closeProductPopup(){
 let popupStartX = 0;
 let popupStartY = 0;
 
-const productPopup =
-document.getElementById("productPopup");
+const productPopup = document.getElementById("productPopup");
 
 productPopup.addEventListener("touchstart", function(e){
+
+  // don't close while sliding popup images
+  if(e.target.closest("#popupImageScroll")){
+    popupStartX = 0;
+    popupStartY = 0;
+    return;
+  }
 
   popupStartX = e.touches[0].clientX;
   popupStartY = e.touches[0].clientY;
@@ -4626,14 +4632,16 @@ productPopup.addEventListener("touchstart", function(e){
 
 productPopup.addEventListener("touchend", function(e){
 
+  // don't close while sliding popup images
+  if(e.target.closest("#popupImageScroll")) return;
+
   const endX = e.changedTouches[0].clientX;
   const endY = e.changedTouches[0].clientY;
 
   const diffX = endX - popupStartX;
   const diffY = Math.abs(endY - popupStartY);
 
-  // swipe right close
-  if(diffX > 80 && diffY < 70){
+  if(diffX > 100 && diffY < 50){
     closeProductPopup();
   }
 
