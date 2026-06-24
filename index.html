@@ -1851,29 +1851,45 @@ position:relative;
 
 .addBtn{
   position:absolute;
+
   right:2px;
   bottom:2px;
 
-  width:30px;
-  height:30px;
+  width:37px;
+  height:37px;
 
-  border:none;
-  border-radius:9px;
+  border:1.5px solid #d8f5e6;
 
-  background:#f4f7f5;
+  border-radius:12px;
+
+  background:#f8fffb;
 
   color:#0BD957;
 
   font-size:22px;
-  font-weight:900;
+  font-weight:600;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  line-height:1;
 
   cursor:pointer;
 
-  box-shadow:0 2px 6px rgba(0,0,0,.08);
+  box-shadow:
+    0 1px 4px rgba(0,0,0,.05);
+
+  padding:0;
+}
+
+.addBtn span{
+  transform:translateY(-1px);
 }
 
 .productInfo{
   text-align:left;
+  padding-left:5px;
 }
 
 .priceRow{
@@ -2036,9 +2052,7 @@ position:relative;
 
 
 </div>
-<div class="section-header">
-  Daily Essentials
-</div>
+
 
 <div class="card-row">
 
