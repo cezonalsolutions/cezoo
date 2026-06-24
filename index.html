@@ -2276,6 +2276,60 @@ position:relative;
 
   text-align:left;
 }
+.popupQtyUnit{
+  padding:12px 16px 0;
+
+  font-size:13px;
+  font-weight:700;
+
+  color:#666;
+}
+
+.popupPriceAddRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:8px 16px 0;
+}
+
+.popupPriceRow{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.popupDiscountPrice{
+  font-size:22px;
+  font-weight:900;
+
+  color:#111;
+}
+
+.popupOriginalPrice{
+  font-size:14px;
+
+  color:#999;
+
+  text-decoration:line-through;
+}
+
+.popupAddBtn{
+  width:90px;
+  height:38px;
+
+  border:1px solid #ddd;
+  border-radius:10px;
+
+  background:#fff;
+
+  color:#111;
+
+  font-size:14px;
+  font-weight:700;
+
+  cursor:pointer;
+}
 </style>
 </head>
 
@@ -2966,6 +3020,25 @@ position:relative;
 <div id="popupProductName" class="popupProductName"></div>
 <div id="popupProductBrand" class="popupProductBrand"></div>
 <div id="popupProductDesc" class="popupProductDesc"></div>
+<div id="popupQtyUnit" class="popupQtyUnit"></div>
+
+<div class="popupPriceAddRow">
+
+  <div class="popupPriceRow">
+
+    <span id="popupDiscountPrice"
+          class="popupDiscountPrice"></span>
+
+    <span id="popupOriginalPrice"
+          class="popupOriginalPrice"></span>
+
+  </div>
+
+  <button class="popupAddBtn">
+    Add
+  </button>
+
+</div>
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -3691,6 +3764,14 @@ document.getElementById("popupProductName").innerText =
   product.brand || "";
   document.getElementById("popupProductDesc").innerText =
   product.short_desc || "";
+  document.getElementById("popupQtyUnit").innerText =
+`${product.quantity || ''} ${product.unit || ''}`;
+
+document.getElementById("popupDiscountPrice").innerText =
+`₹${product.discount_price || 0}`;
+
+document.getElementById("popupOriginalPrice").innerText =
+`₹${product.original_price || 0}`;
   popup.classList.add("open");
 
   imageBox.onscroll = () => {
