@@ -2997,6 +2997,85 @@ position:relative;
   opacity:1;
   transform:translateX(-50%) translateY(-8px);
 }
+.cezooInfoCard{
+  background:#f3f4f6;
+
+  padding:12px 14px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  margin-top:12px;
+}
+
+.cezooLeft{
+  font-size:14px;
+  font-weight:700;
+
+  color:#111;
+}
+
+.cezooRight{
+  font-size:18px;
+  font-weight:400;
+
+  color:#111;
+
+  line-height:1;
+}
+.cezooContent{
+  display:none;
+  padding:14px;
+  background:#fafafa;
+}
+
+.cezooContent.show{
+  display:block;
+}
+
+.cezooHeading{
+  font-size:14px;
+  font-weight:800;
+  color:#111;
+  margin:12px 0 8px;
+}
+
+.infoTable{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+}
+
+.infoTable td{
+  padding:10px;
+  border:1px solid #eee;
+  font-size:13px;
+}
+
+.infoTable td:first-child{
+  font-weight:700;
+  color:#555;
+  width:45%;
+}
+
+.infoTable td:last-child{
+  color:#111;
+}
+
+.popupAdditionalInfo{
+  font-size:13px;
+  line-height:1.7;
+
+  color:#555;
+
+  padding:0;
+
+  background:transparent;
+  border:none;
+
+  white-space:pre-line;
+}
 </style>
 </head>
 
@@ -4011,6 +4090,28 @@ position:relative;
   </div>
 
 </div>
+
+<div class="cezooInfoCard" onclick="toggleCezooInfo()">
+  <div class="cezooLeft">CEZOO</div>
+  <div class="cezooRight" id="cezooToggle">+</div>
+</div>
+
+<div class="cezooContent" id="cezooContent">
+
+  <div class="cezooHeading">
+    Product Highlights
+  </div>
+
+  <div id="popupIngredientsTable"></div>
+
+  <div class="cezooHeading">
+    Additional Information
+  </div>
+
+  <div id="popupAdditionalInfo"
+       class="popupAdditionalInfo"></div>
+
+</div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -4762,6 +4863,10 @@ product.seller_address || "";
 
 document.getElementById("popupCustomerCare").innerText =
 product.customer_care || "";
+renderIngredientsTable(product.ingredients);
+
+document.getElementById("popupAdditionalInfo").innerText =
+  product.additional_info || "";
   popup.classList.add("open");
 
   imageBox.onscroll = () => {
@@ -4817,18 +4922,88 @@ productPopup.addEventListener("touchend", function(e){
 });
 function showHighlightMsg(card, text){
 
-  document.querySelectorAll(".highlightCard")
-    .forEach(c => {
-      if(c !== card){
-        c.classList.remove("showMsg");
-      }
-    });
-
   const msg = card.querySelector(".highlightMsg");
 
   msg.innerText = text;
 
-  card.classList.toggle("showMsg");
+  const isOpen = card.classList.contains("showMsg");
+
+  document.querySelectorAll(".highlightCard")
+    .forEach(c => c.classList.remove("showMsg"));
+
+  if(!isOpen){
+    card.classList.add("showMsg");
+  }
+
+  setTimeout(() => {
+
+    document.addEventListener("click", function closeOutside(e){
+
+      if(!e.target.closest(".highlightCard")){
+
+        document.querySelectorAll(".highlightCard")
+          .forEach(c => c.classList.remove("showMsg"));
+
+        document.removeEventListener("click", closeOutside);
+      }
+
+    });
+
+  }, 10);
+
+}
+function renderIngredientsTable(value){
+
+  const box =
+  document.getElementById("popupIngredientsTable");
+
+  let data = value;
+
+  if(typeof data === "string"){
+    try{
+      data = JSON.parse(data);
+    }catch(e){
+      data = [];
+    }
+  }
+
+  if(!Array.isArray(data) || data.length === 0){
+    box.innerHTML = "";
+    return;
+  }
+
+  let rows = "";
+
+  for(let i = 0; i < data.length; i += 2){
+    rows += `
+      <tr>
+        <td>${data[i] || ""}</td>
+        <td>${data[i + 1] || ""}</td>
+      </tr>
+    `;
+  }
+
+  box.innerHTML = `
+    <table class="infoTable">
+      ${rows}
+    </table>
+  `;
+}
+
+function toggleCezooInfo(){
+
+  const content =
+  document.getElementById("cezooContent");
+
+  const icon =
+  document.getElementById("cezooToggle");
+
+  content.classList.toggle("show");
+
+  icon.innerText =
+  content.classList.contains("show")
+  ? "−"
+  : "+";
 }
 </script>
 
