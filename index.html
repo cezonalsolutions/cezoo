@@ -3144,6 +3144,88 @@ position:relative;
 .popupImageItem.loaded img{
   opacity:1;
 }
+.popupDeliveryInfo{
+  padding:0 16px 8px;
+
+  font-size:12px;
+  font-weight:700;
+
+  color:#0BD957;
+
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.popupDeliveryInfo i{
+  font-size:11px;
+}
+.popupTitleRow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:12px 16px 0;
+}
+
+.popupMeta{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.popupDiscountBadge{
+  padding:2px 6px;
+
+  border-radius:6px;
+
+  background:#eefcf3;
+
+  color:#16a34a;
+
+  font-size:11px;
+  font-weight:800;
+}
+
+.popupRatingBadge{
+  font-size:11px;
+  font-weight:700;
+
+  color:#555;
+}
+
+.popupProductName{
+  flex:1;
+
+  padding:0;
+
+  font-size:20px;
+  font-weight:800;
+
+  color:#111;
+}
+
+.popupDiscountBadge{
+  flex-shrink:0;
+
+  min-width:52px;
+  height:24px;
+
+  padding:0 8px;
+
+  border-radius:999px;
+
+  background:#e9fff2;
+
+  color:#0BD957;
+
+  font-size:12px;
+  font-weight:800;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 </style>
 </head>
 
@@ -4087,7 +4169,26 @@ position:relative;
     <div id="popupImageScroll" class="popupImageScroll"></div>
 
     <div class="popupDots" id="popupDots"></div>
-<div id="popupProductName" class="popupProductName"></div>
+<div class="popupTitleRow">
+
+  <div id="popupProductName"
+       class="popupProductName">
+  </div>
+
+  <div class="popupMeta">
+
+    <div id="popupDiscountBadge"
+         class="popupDiscountBadge">
+    </div>
+
+    <div id="popupRatingBadge"
+         class="popupRatingBadge">
+    </div>
+
+  </div>
+
+</div>
+
 <div id="popupProductBrand" class="popupProductBrand"></div>
 <div id="popupProductDesc" class="popupProductDesc"></div>
 <div id="popupQtyUnit" class="popupQtyUnit"></div>
@@ -4108,6 +4209,10 @@ position:relative;
     Add
   </button>
 
+</div>
+<div class="popupDeliveryInfo">
+  <i class="fa-solid fa-truck-fast"></i>
+  Delivery in 10–15 Minutes
 </div>
 <div class="popupHighlights">
 
@@ -4918,6 +5023,25 @@ dots.querySelectorAll("span").forEach((dot,i) => {
 });
 document.getElementById("popupProductName").innerText =
   product.name || "";
+  const original =
+Number(product.original_price || 0);
+
+const discount =
+Number(product.discount_price || 0);
+
+const off =
+original > 0
+? Math.round(
+    ((original - discount) / original) * 100
+  )
+: 0;
+
+document.getElementById("popupDiscountBadge").innerText =
+off > 0
+? `${off}% OFF`
+: "";
+document.getElementById("popupRatingBadge").innerText =
+`★ ${product.rating || 4.8}`;
   document.getElementById("popupProductBrand").innerText =
   product.brand || "";
   document.getElementById("popupProductDesc").innerText =
