@@ -3043,6 +3043,24 @@ function showFreshProductShimmer(){
 
 }
 
+function preloadImage(src){
+  return new Promise(resolve => {
+
+    if(!src){
+      resolve();
+      return;
+    }
+
+    const img = new Image();
+
+    img.onload = resolve;
+    img.onerror = resolve;
+
+    img.src = src;
+
+  });
+}
+
 async function loadFreshProducts(){
 
   if(freshProductsLoaded) return;
@@ -3059,10 +3077,15 @@ async function loadFreshProducts(){
 
   if(error){
     console.log(error);
+    freshProductsLoaded = false;
     return;
   }
 
-  renderFreshProducts(data);
+  await Promise.all(
+    (data || []).map(p => preloadImage(p.image1))
+  );
+
+  renderFreshProducts(data || []);
 
 }
 
@@ -3080,7 +3103,7 @@ function renderFreshProducts(products){
 
         <img
           class="productImage"
-          src="${p.image1}"
+          src="${p.image1 || ''}"
           loading="lazy"
         >
 
@@ -3120,32 +3143,24 @@ function renderFreshProducts(products){
 
 }
 
-/* Load only when user reaches section */
-
 const freshObserver =
-new IntersectionObserver(
+new IntersectionObserver((entries)=>{
 
-  (entries)=>{
+  entries.forEach(entry=>{
 
-    entries.forEach(entry=>{
+    if(entry.isIntersecting){
 
-      if(entry.isIntersecting){
+      loadFreshProducts();
 
-        loadFreshProducts();
+      freshObserver.disconnect();
 
-        freshObserver.disconnect();
+    }
 
-      }
+  });
 
-    });
-
-  },
-
-  {
-    threshold:0.15
-  }
-
-);
+},{
+  threshold:0.15
+});
 
 freshObserver.observe(
   document.getElementById("freshProductsRow")
