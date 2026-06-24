@@ -2196,8 +2196,9 @@ position:relative;
 
 .popupClose{
   position:fixed;
-  top:14px;
-  right:14px;
+
+  top:34px; /* was 14px */
+  left:14px;
 
   width:34px;
   height:34px;
@@ -2207,10 +2208,16 @@ position:relative;
 
   background:#f3f4f6;
 
-  font-size:24px;
+  font-size:22px;
   line-height:1;
 
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
   z-index:100000;
+
+  cursor:pointer;
 }
 
 .popupImageScroll{
@@ -3923,6 +3930,35 @@ function closeProductPopup(){
   document.getElementById("productPopup")
     .classList.remove("open");
 }
+
+
+let popupStartX = 0;
+let popupStartY = 0;
+
+const productPopup =
+document.getElementById("productPopup");
+
+productPopup.addEventListener("touchstart", function(e){
+
+  popupStartX = e.touches[0].clientX;
+  popupStartY = e.touches[0].clientY;
+
+});
+
+productPopup.addEventListener("touchend", function(e){
+
+  const endX = e.changedTouches[0].clientX;
+  const endY = e.changedTouches[0].clientY;
+
+  const diffX = endX - popupStartX;
+  const diffY = Math.abs(endY - popupStartY);
+
+  // swipe right close
+  if(diffX > 80 && diffY < 70){
+    closeProductPopup();
+  }
+
+});
 </script>
 
 </body>
