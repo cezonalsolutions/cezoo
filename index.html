@@ -3076,6 +3076,74 @@ position:relative;
 
   white-space:pre-line;
 }
+.autoProductRow{
+  display:flex;
+  gap:9px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:8px 10px 14px;
+
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+}
+
+.autoProductRow::-webkit-scrollbar{
+  display:none;
+}
+.popupImageItem{
+  position:relative;
+}
+
+.popupImgLoader{
+  width:80%;
+  height:80%;
+
+  border-radius:16px;
+
+  background:#f1f1f1;
+
+  position:absolute;
+
+  top:50%;
+  left:50%;
+
+  transform:translate(-50%,-50%);
+
+  overflow:hidden;
+}
+
+.popupImgLoader::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  transform:translateX(-100%);
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.8),
+    transparent
+  );
+  animation:popupImgShimmer 1s infinite;
+}
+
+@keyframes popupImgShimmer{
+  100%{
+    transform:translateX(100%);
+  }
+}
+
+.popupImageItem img{
+  opacity:0;
+  transition:.25s ease;
+}
+
+.popupImageItem.loaded .popupImgLoader{
+  display:none;
+}
+
+.popupImageItem.loaded img{
+  opacity:1;
+}
 </style>
 </head>
 
@@ -3282,7 +3350,12 @@ position:relative;
 </div>
     <div id="freshProductsRow"></div>
 
-    
+   
+<div class="autoProductRow"
+     data-table="fresh_products"
+     data-ids="14,15,16,17,18,19,20,21">
+</div>
+
 <div class="seeAllBar">
   <span>See All</span>
   <span class="seeAllArrow">›</span>
@@ -4825,7 +4898,12 @@ function openProductPopup(product){
 
  imageBox.innerHTML = images.map(img => `
   <div class="popupImageItem">
-    <img src="${img}">
+    <div class="popupImgLoader"></div>
+
+    <img
+      src="${img}"
+      onload="this.parentElement.classList.add('loaded')"
+      onerror="this.parentElement.classList.add('loaded')">
   </div>
 `).join("");
 
@@ -5007,6 +5085,109 @@ function toggleCezooInfo(){
   ? "−"
   : "+";
 }
+function showAutoRowShimmer(row){
+  row.innerHTML = Array(8).fill(`
+    <div class="freshProductShimmerCard">
+      <div class="freshProductShimmerImg"></div>
+      <div class="freshProductShimmerPrice"></div>
+      <div class="freshProductShimmerName"></div>
+      <div class="freshProductShimmerQty"></div>
+    </div>
+  `).join("");
+}
+
+async function loadAutoProductRow(row){
+
+  if(row.dataset.loaded === "true") return;
+
+  row.dataset.loaded = "true";
+
+  showAutoRowShimmer(row);
+
+  const table = row.dataset.table || "fresh_products";
+
+  const ids = row.dataset.ids
+    .split(",")
+    .map(id => Number(id.trim()))
+    .filter(Boolean);
+
+  const { data, error } = await supabaseClient
+    .from(table)
+    .select("*")
+    .in("id", ids);
+
+  if(error){
+    console.log(error);
+    row.innerHTML = "";
+    row.dataset.loaded = "false";
+    return;
+  }
+
+  await Promise.all(
+    (data || []).map(p => preloadImage(p.image1))
+  );
+
+  row.innerHTML = (data || []).map(p => `
+    <div class="productCard">
+
+      <div class="productImageWrap"
+           onclick='openProductPopup(${JSON.stringify(p)})'>
+
+        <img
+          class="productImage"
+          src="${p.image1 || ''}"
+          loading="lazy"
+        >
+
+        <button class="addBtn"
+          onclick="event.stopPropagation(); showQty(this)">
+          <span>+</span>
+        </button>
+
+      </div>
+
+      <div class="productInfo"
+           onclick='openProductPopup(${JSON.stringify(p)})'>
+
+        <div class="priceRow">
+          <span class="discountPrice">₹${p.discount_price || 0}</span>
+          <span class="originalPrice">₹${p.original_price || 0}</span>
+        </div>
+
+        <div class="productName">${p.name || ''}</div>
+
+        <div class="productQty">
+          ${p.quantity || ''} ${p.unit || ''}
+        </div>
+
+      </div>
+
+    </div>
+  `).join("");
+}
+
+const autoProductObserver =
+new IntersectionObserver(entries => {
+
+  entries.forEach(entry => {
+
+    if(entry.isIntersecting){
+
+      loadAutoProductRow(entry.target);
+
+      autoProductObserver.unobserve(entry.target);
+
+    }
+
+  });
+
+},{
+  threshold:0.15
+});
+
+document.querySelectorAll(".autoProductRow")
+  .forEach(row => autoProductObserver.observe(row));
+
 </script>
 
 </body>
