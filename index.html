@@ -1933,6 +1933,77 @@ position:relative;
   color:#666;
   font-weight:600;
 }
+
+.freshProductShimmerRow{
+  display:flex;
+  gap:9px;
+  overflow-x:auto;
+  padding:8px 10px 14px;
+  scrollbar-width:none;
+}
+
+.freshProductShimmerRow::-webkit-scrollbar{
+  display:none;
+}
+
+.freshProductShimmerCard{
+  flex:0 0 106px;
+}
+
+.freshProductShimmerImg,
+.freshProductShimmerPrice,
+.freshProductShimmerName,
+.freshProductShimmerQty{
+  position:relative;
+  overflow:hidden;
+  background:#f1f1f1;
+  border-radius:8px;
+}
+
+.freshProductShimmerImg{
+  height:82px;
+}
+
+.freshProductShimmerPrice{
+  width:55px;
+  height:20px;
+  margin-top:4px;
+}
+
+.freshProductShimmerName{
+  width:90px;
+  height:13px;
+  margin-top:7px;
+}
+
+.freshProductShimmerQty{
+  width:45px;
+  height:10px;
+  margin-top:5px;
+}
+
+.freshProductShimmerImg::after,
+.freshProductShimmerPrice::after,
+.freshProductShimmerName::after,
+.freshProductShimmerQty::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  transform:translateX(-100%);
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.8),
+    transparent
+  );
+  animation:freshProductShimmerMove 1s infinite;
+}
+
+@keyframes freshProductShimmerMove{
+  100%{
+    transform:translateX(100%);
+  }
+}
 </style>
 </head>
 
@@ -2946,7 +3017,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const PRODUCT_IDS = [1,2,3,4,5,6,7,8];
 
+let freshProductsLoaded = false;
+
+function showFreshProductShimmer(){
+
+  const row =
+  document.getElementById("freshProductsRow");
+
+  row.innerHTML =
+  Array(8).fill(`
+
+    <div class="freshProductShimmerCard">
+
+      <div class="freshProductShimmerImg"></div>
+
+      <div class="freshProductShimmerPrice"></div>
+
+      <div class="freshProductShimmerName"></div>
+
+      <div class="freshProductShimmerQty"></div>
+
+    </div>
+
+  `).join("");
+
+}
+
 async function loadFreshProducts(){
+
+  if(freshProductsLoaded) return;
+
+  freshProductsLoaded = true;
+
+  showFreshProductShimmer();
 
   const { data, error } =
   await supabaseClient
@@ -2960,6 +3063,7 @@ async function loadFreshProducts(){
   }
 
   renderFreshProducts(data);
+
 }
 
 function renderFreshProducts(products){
@@ -2968,51 +3072,84 @@ function renderFreshProducts(products){
   document.getElementById("freshProductsRow");
 
   row.innerHTML =
-products.map(p => `
+  products.map(p => `
 
-<div class="productCard">
+    <div class="productCard">
 
-  <div class="productImageWrap">
+      <div class="productImageWrap">
 
-    <img
-      class="productImage"
-      src="${p.image1}"
-      loading="lazy"
-    >
+        <img
+          class="productImage"
+          src="${p.image1}"
+          loading="lazy"
+        >
 
-    <button class="addBtn">+</button>
+        <button class="addBtn">
+          <span>+</span>
+        </button>
 
-  </div>
+      </div>
 
-  <div class="productInfo">
+      <div class="productInfo">
 
-    <div class="priceRow">
+        <div class="priceRow">
 
-      <span class="discountPrice">
-        ₹${p.discount_price || 0}
-      </span>
+          <span class="discountPrice">
+            ₹${p.discount_price || 0}
+          </span>
 
-      <span class="originalPrice">
-        ₹${p.original_price || 0}
-      </span>
+          <span class="originalPrice">
+            ₹${p.original_price || 0}
+          </span>
+
+        </div>
+
+        <div class="productName">
+          ${p.name || ''}
+        </div>
+
+        <div class="productQty">
+          ${p.quantity || ''} ${p.unit || ''}
+        </div>
+
+      </div>
 
     </div>
 
-    <div class="productName">
-      ${p.name || ''}
-    </div>
+  `).join("");
 
-    <div class="productQty">
-      ${p.quantity || ''} ${p.unit || ''}
-    </div>
-
-  </div>
-
-</div>
-
-`).join("");
 }
-loadFreshProducts();
+
+/* Load only when user reaches section */
+
+const freshObserver =
+new IntersectionObserver(
+
+  (entries)=>{
+
+    entries.forEach(entry=>{
+
+      if(entry.isIntersecting){
+
+        loadFreshProducts();
+
+        freshObserver.disconnect();
+
+      }
+
+    });
+
+  },
+
+  {
+    threshold:0.15
+  }
+
+);
+
+freshObserver.observe(
+  document.getElementById("freshProductsRow")
+);
 </script>
 
 </body>
