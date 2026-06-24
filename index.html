@@ -2094,6 +2094,28 @@ position:relative;
 
   text-overflow:ellipsis;
 }
+.launchCard.active img{
+  background:#f5f0ff;
+  border:none;
+}
+
+.launchCard.active span{
+  color:#111;
+  font-weight:800;
+}
+
+#launchProductsRow{
+  display:flex;
+  gap:9px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:8px 10px 14px;
+  scrollbar-width:none;
+}
+
+#launchProductsRow::-webkit-scrollbar{
+  display:none;
+}
 </style>
 </head>
 
@@ -2357,37 +2379,39 @@ position:relative;
 </div>
 <div class="launchRow">
 
-  <div class="launchCard">
+  <div class="launchCard active" onclick="loadLaunchProducts('fruits', this)">
     <img src="fresh/ornage.webp" alt="">
     <span>Fruits</span>
   </div>
 
-  <div class="launchCard">
+  <div class="launchCard" onclick="loadLaunchProducts('mangoes', this)">
     <img src="fresh/magoes.png" alt="">
     <span>Mangoes</span>
   </div>
 
-  <div class="launchCard">
+  <div class="launchCard" onclick="loadLaunchProducts('eggs', this)">
     <img src="fresh/eggs.webp" alt="">
     <span>Eggs</span>
   </div>
 
-  <div class="launchCard">
+  <div class="launchCard" onclick="loadLaunchProducts('exotics', this)">
     <img src="fresh/exoo.png" alt="">
     <span>Exotics</span>
   </div>
 
-  <div class="launchCard">
+  <div class="launchCard" onclick="loadLaunchProducts('veggies', this)">
     <img src="fresh/vegies.png" alt="">
     <span>Veggies</span>
   </div>
 
-  <div class="launchCard">
+  <div class="launchCard" onclick="loadLaunchProducts('new', this)">
     <img src="fresh/new.png" alt="">
     <span>New</span>
   </div>
 
 </div>
+
+<div id="launchProductsRow"></div>
 
 
   </div>
@@ -3148,7 +3172,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-const PRODUCT_IDS = [1,2,3,4,5,6,7,8];
+const PRODUCT_IDS = [2,3,4,5,6,7,8,9];
 
 let freshProductsLoaded = false;
 
@@ -3298,6 +3322,117 @@ new IntersectionObserver((entries)=>{
 freshObserver.observe(
   document.getElementById("freshProductsRow")
 );
+
+
+const LAUNCH_PRODUCT_IDS = {
+  fruits: [10,11,12,13,14,15,16,17,18],
+  mangoes: [19,20,21,22,23,24,25,26,27],
+  eggs: [28,28,29,30,31,32,33,34,35,36],
+  exotics: [37,38,39,40,41,42,43,44,45],
+  veggies: [46,47,48,49,50,51,52,53,54],
+  new: [55,56,57,58,59,60,61,62,63]
+};
+
+const launchCache = {};
+
+function showLaunchShimmer(){
+  const row = document.getElementById("launchProductsRow");
+
+  row.innerHTML = Array(6).fill(`
+    <div class="freshProductShimmerCard">
+      <div class="freshProductShimmerImg"></div>
+      <div class="freshProductShimmerPrice"></div>
+      <div class="freshProductShimmerName"></div>
+      <div class="freshProductShimmerQty"></div>
+    </div>
+  `).join("");
+}
+
+async function loadLaunchProducts(type, clickedCard){
+
+  document.querySelectorAll(".launchCard")
+    .forEach(card => card.classList.remove("active"));
+
+  if(clickedCard){
+    clickedCard.classList.add("active");
+  }
+
+  if(launchCache[type]){
+    renderLaunchProducts(launchCache[type]);
+    return;
+  }
+
+  showLaunchShimmer();
+
+  const ids = LAUNCH_PRODUCT_IDS[type] || [];
+
+  const { data, error } = await supabaseClient
+    .from("fresh_products")
+    .select("*")
+    .in("id", ids);
+
+  if(error){
+    console.log(error);
+    document.getElementById("launchProductsRow").innerHTML = "";
+    return;
+  }
+
+  await Promise.all(
+    (data || []).map(p => preloadImage(p.image1))
+  );
+
+  launchCache[type] = data || [];
+
+  renderLaunchProducts(launchCache[type]);
+}
+
+function renderLaunchProducts(products){
+
+  const row = document.getElementById("launchProductsRow");
+
+  row.innerHTML = products.map(p => `
+    <div class="productCard">
+
+      <div class="productImageWrap">
+
+        <img
+          class="productImage"
+          src="${p.image1 || ''}"
+          loading="lazy"
+        >
+
+        <button class="addBtn">
+          <span>+</span>
+        </button>
+
+      </div>
+
+      <div class="productInfo">
+
+        <div class="priceRow">
+          <span class="discountPrice">₹${p.discount_price || 0}</span>
+          <span class="originalPrice">₹${p.original_price || 0}</span>
+        </div>
+
+        <div class="productName">${p.name || ''}</div>
+
+        <div class="productQty">
+          ${p.quantity || ''} ${p.unit || ''}
+        </div>
+
+      </div>
+
+    </div>
+  `).join("");
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const defaultLaunch = document.querySelector(".launchCard.active");
+
+  if(defaultLaunch){
+    loadLaunchProducts("fruits", defaultLaunch);
+  }
+});
 </script>
 
 </body>
