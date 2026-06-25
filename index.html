@@ -2435,18 +2435,38 @@ position:relative;
   border-top: 1px solid #eee;
   z-index: 999999;
   box-sizing: border-box;
+  display:flex;
+  gap:10px;
 }
 
 #popupAddBtnFixed{
-  width: 100%;
-  height: 54px;
-  border: 2px solid #86EFAC;
-  border-radius: 14px;
-  background: #fff;
-  color: #16A34A;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
+  flex:1;
+  height:54px;
+  border:2px solid #86EFAC;
+  border-radius:14px;
+  background:#fff;
+  color:#16A34A;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+}
+.popupCartSummary{
+  width:110px;
+  height:54px;
+  border-radius:14px;
+  background:#f70854;
+  color:#fff;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  font-size:14px;
+  font-weight:800;
+
+  transform: translateY(9px);
+}
+.popupCartSummary i{
+  font-size:16px;
 }
 /* MAIN SECTION */
 .brands-section{
@@ -3344,26 +3364,25 @@ position:relative;
 
 .deliveryTitle{
   font-family:Arial,sans-serif;
-
-  font-size:13px;
+  font-size:clamp(11px, 2.8vw, 13px);
   font-weight:700;
-
   color:#fff;
-
-  line-height:1.1;
+  line-height:1.15;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 
 .deliverySub{
   margin-top:3px;
-
   font-family:Arial,sans-serif;
-
-  font-size:11px;
+  font-size:clamp(9px, 2.5vw, 11px);
   font-weight:500;
-
   color:rgba(255,255,255,.78);
-
   line-height:1.2;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
 }
 .loginPage{
   width:100%;
@@ -4759,9 +4778,16 @@ button{
 
 </div>
 <div class="popupFixedAdd">
- <button id="popupAddBtnFixed" onclick="return popupAddToCart(event)">
-  Add to Cart
-</button>
+
+  <button id="popupAddBtnFixed" onclick="return popupAddToCart(event)">
+    Add to Cart
+  </button>
+
+  <div class="popupCartSummary" id="popupCartSummary">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <span id="popupCartCount">0 items</span>
+  </div>
+
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -5619,6 +5645,7 @@ addedTime: Date.now()
 
   saveCart();
   updateCartFloat();
+  updatePopupCartSummary();
   updatePopupCartButton();
   restoreCartButtons(document);
 
@@ -5651,6 +5678,7 @@ function popupIncrease(e){
 
   saveCart();
   updateCartFloat();
+  updatePopupCartSummary();
   updatePopupCartButton();
   restoreCartButtons(document);
 
@@ -5670,6 +5698,7 @@ function popupDecrease(e){
 
   saveCart();
   updateCartFloat();
+  updatePopupCartSummary();
   updatePopupCartButton();
   restoreCartButtons(document);
 
@@ -6039,6 +6068,7 @@ addedTime: Date.now()
 
   saveCart();
   updateCartFloat();
+  updatePopupCartSummary();
   renderCartBtn(btn, key, cart[key].qty);
   return false;
 }
@@ -6064,6 +6094,7 @@ function increaseCart(e, btn){
   cart[key].qty++;
   saveCart();
 updateCartFloat();
+updatePopupCartSummary();
   renderCartBtn(addBtn, key, cart[key].qty);
   return false;
 }
@@ -6081,6 +6112,7 @@ function decreaseCart(e, btn){
     delete cart[key];
     saveCart();
 updateCartFloat();
+updatePopupCartSummary();
     addBtn.classList.remove("qtyMode");
     addBtn.innerHTML = `<span>+</span>`;
     return false;
@@ -6088,6 +6120,7 @@ updateCartFloat();
 
  saveCart();
  updateCartFloat();
+ updatePopupCartSummary();
 updatePopupCartButton();
 restoreCartButtons(document);
   renderCartBtn(addBtn, key, cart[key].qty);
@@ -6137,7 +6170,23 @@ function updateCartFloat(){
 }
 document.addEventListener("DOMContentLoaded", () => {
   updateCartFloat();
+  updatePopupCartSummary();
 });
+function updatePopupCartSummary(){
+  const box = document.getElementById("popupCartSummary");
+  const count = document.getElementById("popupCartCount");
+
+  const totalQty = Object.values(cart || {})
+    .reduce((sum,item) => sum + Number(item.qty || 0), 0);
+
+  if(totalQty <= 0){
+    box.style.display = "none";
+    return;
+  }
+
+  box.style.display = "flex";
+  count.innerText = totalQty === 1 ? "1 item" : `${totalQty} items`;
+}
 </script>
 
 </body>
