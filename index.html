@@ -2172,7 +2172,7 @@ position:relative;
   inset:0;
 
   background:#fff;
-  z-index:99999;
+  z-index:9999999;
 
   display:none;
 
@@ -3275,7 +3275,7 @@ position:relative;
   height:58px;
   display:flex;
   gap:10px;
-  z-index:9;
+  z-index:999999;
   transition:bottom .35s ease;
 }
 
@@ -3645,6 +3645,81 @@ button{
     max-height:32px;
     transform:scale(2.00);
 }
+
+.normalSeeAllPopup{
+  position:fixed;
+  inset:0;
+  background:#fff;
+  z-index:999999;
+  display:none;
+  overflow-y:auto;
+}
+
+.normalSeeAllPopup.open{
+  display:block;
+}
+
+.normalPopupHeader{
+  position:sticky;
+  top:0;
+  height:64px;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 14px;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
+  z-index:10;
+}
+
+.normalPopupHeader button{
+  width:36px;
+  height:36px;
+  margin:0;
+  border:none;
+  background:none;
+  color:#111;
+  font-size:34px;
+  line-height:1;
+}
+
+.normalPopupHeader h3{
+  margin:0;
+  font-size:18px;
+  font-weight:900;
+}
+
+.normalPopupHeader p{
+  margin:2px 0 0;
+  font-size:12px;
+  color:#666;
+  font-weight:600;
+}
+
+.normalPopupGrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px 10px;
+  padding:14px 10px 90px;
+}
+
+.normalPopupGrid .productCard{
+  flex:none;
+  width:100%;
+}
+
+.normalPopupGrid .productImageWrap{
+  height:130px;
+  background:#f7f8fa;
+  border-radius:14px;
+}
+
+.normalPopupGrid .productImage{
+  width:88%;
+  height:88%;
+  object-fit:contain;
+}
+
 </style>
 </head>
 
@@ -4490,7 +4565,17 @@ button{
   <div class="results" id="results"></div>
 </div>
 
+<div id="normalSeeAllPopup" class="normalSeeAllPopup">
+  <div class="normalPopupHeader">
+    <button id="closeNormalPopup">‹</button>
+    <div>
+      <h3 id="normalPopupTitle">Products</h3>
+      <p id="normalPopupSub">Fresh picks for you</p>
+    </div>
+  </div>
 
+  <div id="normalPopupGrid" class="normalPopupGrid"></div>
+</div>
 
 <div id="loginPopup" class="loginPopup" onclick="closeLoginPopup()">
 
@@ -6304,6 +6389,97 @@ function updatePopupCartSummary(){
 
   box.style.display = "flex";
   count.innerText = totalQty === 1 ? "1 item" : `${totalQty} items`;
+}
+const normalPopupConfigs = {
+  seeAllBar: {
+    title: "Daily Essentials",
+    subtitle: "Handpicked Daily Essentials",
+    table: "grocery_products",
+    ids: [14,15,16,17,18,19,20,21]
+  }
+};
+
+const normalPopupCache = {};
+
+document.querySelectorAll(".seeAllBar").forEach(bar => {
+  bar.addEventListener("click", () => {
+    const config = normalPopupConfigs[bar.id];
+    if(!config) return;
+
+    openNormalSeeAllPopup(config);
+  });
+});
+
+async function openNormalSeeAllPopup(config){
+  document.getElementById("normalPopupTitle").innerText = config.title;
+  document.getElementById("normalPopupSub").innerText = config.subtitle || "";
+
+  document.getElementById("normalSeeAllPopup").classList.add("open");
+  document.body.style.overflow = "hidden";
+
+  await loadNormalPopupProducts(config);
+}
+
+document.getElementById("closeNormalPopup").addEventListener("click", () => {
+  document.getElementById("normalSeeAllPopup").classList.remove("open");
+  document.body.style.overflow = "";
+});
+
+async function loadNormalPopupProducts(config){
+  const grid = document.getElementById("normalPopupGrid");
+
+  grid.innerHTML = `<div style="grid-column:1/-1;padding:30px;text-align:center;font-weight:800;">Loading...</div>`;
+
+  const cacheKey = `${config.table}_${config.ids.join("_")}`;
+
+  if(normalPopupCache[cacheKey]){
+    renderNormalPopupProducts(normalPopupCache[cacheKey], config.table);
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from(config.table)
+    .select("*")
+    .in("id", config.ids);
+
+  if(error){
+    console.log(error);
+    grid.innerHTML = `<div style="grid-column:1/-1;padding:30px;text-align:center;color:red;font-weight:800;">Products not loaded</div>`;
+    return;
+  }
+
+  normalPopupCache[cacheKey] = data || [];
+  renderNormalPopupProducts(data || [], config.table);
+}
+
+function renderNormalPopupProducts(products, table){
+  const grid = document.getElementById("normalPopupGrid");
+
+  grid.innerHTML = products.map(p => `
+    <div class="productCard" data-id="${p.id}" data-table="${table}">
+
+      <div class="productImageWrap" onclick='openProductPopup(Object.assign(${JSON.stringify(p)}, {table:"${table}"}))'>
+        <img class="productImage" src="${p.image1 || ''}" loading="lazy">
+
+        <button class="addBtn" onclick='return addToCart(event,this,${JSON.stringify(p)})'>
+          <span>+</span>
+        </button>
+      </div>
+
+      <div class="productInfo">
+        <div class="priceRow">
+          <span class="discountPrice">₹${p.discount_price || 0}</span>
+          <span class="originalPrice">₹${p.original_price || 0}</span>
+        </div>
+
+        <div class="productName">${p.name || ""}</div>
+        <div class="productQty">${p.quantity || ""} ${p.unit || ""}</div>
+      </div>
+
+    </div>
+  `).join("");
+
+  restoreCartButtons(grid);
 }
 </script>
 
