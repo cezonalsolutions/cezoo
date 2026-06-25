@@ -5811,7 +5811,7 @@ otpInputs.forEach((input,index) => {
 
     localStorage.setItem("cezooUser", JSON.stringify(user));
 
-    window.location.href = "index.html";
+    closeLoginPopup();
 
   }else{
     document.getElementById("error").innerText = "Incorrect OTP";
