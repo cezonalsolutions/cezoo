@@ -3515,6 +3515,35 @@ button{
   transform:translateY(0);
   pointer-events:auto;
 }
+#popupAddBtnFixed{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:28px;
+}
+
+#popupAddBtnFixed button{
+  width:34px;
+  height:34px;
+  margin:0;
+  border:none;
+  border-radius:50%;
+  background:#e9fff2;
+  color:#16A34A;
+  font-size:22px;
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+#popupAddBtnFixed .qty{
+  font-size:18px;
+  font-weight:900;
+  color:#111;
+  min-width:24px;
+  text-align:center;
+}
 </style>
 </head>
 
@@ -3723,7 +3752,7 @@ button{
 
    
 <div class="autoProductRow"
-     data-table="fresh_products"
+     data-table="grocery_products"
      data-ids="14,15,16,17,18,19,20,21">
 </div>
 
@@ -4675,9 +4704,9 @@ button{
 
 </div>
 <div class="popupFixedAdd">
-  <button id="popupAddBtnFixed">
-    Add to Cart
-  </button>
+ <button id="popupAddBtnFixed" onclick="return popupAddToCart(event)">
+  Add to Cart
+</button>
 </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -5083,6 +5112,7 @@ function showFreshProductShimmer(){
     </div>
 
   `).join("");
+  restoreCartButtons(row);
 
 }
 
@@ -5140,17 +5170,15 @@ function renderFreshProducts(products){
   row.innerHTML =
   products.map(p => `
 
-    <div class="productCard">
-
-      <div class="productImageWrap" onclick='openProductPopup(${JSON.stringify(p)})'>
+   <div class="productCard" data-id="${p.id}" data-table="fresh_products">
+      <div class="productImageWrap" onclick='openProductPopup(Object.assign(${JSON.stringify(p)}, {table:"fresh_products"}))'>
 
         <img
           class="productImage"
           src="${p.image1 || ''}"
           loading="lazy"
         >
-
-      <button class="addBtn" onclick="return showQty(event,this)">
+<button class="addBtn" onclick='return addToCart(event,this,${JSON.stringify(p)})'>
   <span>+</span>
 </button>
 
@@ -5183,6 +5211,7 @@ function renderFreshProducts(products){
     </div>
 
   `).join("");
+  restoreCartButtons(row);
 
 }
 
@@ -5232,6 +5261,7 @@ function showLaunchShimmer(){
       <div class="freshProductShimmerQty"></div>
     </div>
   `).join("");
+  restoreCartButtons(row);
 }
 
 async function loadLaunchProducts(type, clickedCard){
@@ -5277,9 +5307,9 @@ function renderLaunchProducts(products){
   const row = document.getElementById("launchProductsRow");
 
   row.innerHTML = products.map(p => `
-    <div class="productCard">
+    <div class="productCard" data-id="${p.id}" data-table="fresh_products">
 
-      <div class="productImageWrap" onclick='openProductPopup(${JSON.stringify(p)})'>
+      <div class="productImageWrap" onclick='openProductPopup(Object.assign(${JSON.stringify(p)}, {table:"fresh_products"}))'>
 
         <img
           class="productImage"
@@ -5287,13 +5317,13 @@ function renderLaunchProducts(products){
           loading="lazy"
         >
 
-        <button class="addBtn" onclick="return showQty(event,this)">
+       <button class="addBtn" onclick='return addToCart(event,this,${JSON.stringify(p)})'>
           <span>+</span>
         </button>
 
       </div>
 
-      <div class="productInfo" onclick='openProductPopup(${JSON.stringify(p)})'>
+      <div class="productInfo" onclick='openProductPopup(Object.assign(${JSON.stringify(p)}, {table:"fresh_products"}))'>
 
         <div class="priceRow">
           <span class="discountPrice">₹${p.discount_price || 0}</span>
@@ -5310,6 +5340,7 @@ function renderLaunchProducts(products){
 
     </div>
   `).join("");
+  restoreCartButtons(row);
 
 }
 
@@ -5320,66 +5351,17 @@ document.addEventListener("DOMContentLoaded", () => {
     loadLaunchProducts("fruits", defaultLaunch);
   }
 });
-function showQty(e, btn){
-
-  e.preventDefault();
-  e.stopPropagation();
-  e.stopImmediatePropagation();
-
-  btn.classList.add("qtyMode");
-
-  btn.innerHTML = `
-    <button onclick="return decreaseQty(event,this)">−</button>
-    <span class="qty">1</span>
-    <button onclick="return increaseQty(event,this)">+</button>
-  `;
-
-  return false;
-}
-
-function increaseQty(e, btn){
-
-  e.preventDefault();
-  e.stopPropagation();
-  e.stopImmediatePropagation();
-
-  const qty = btn.parentElement.querySelector(".qty");
-  qty.innerText = Number(qty.innerText) + 1;
-
-  return false;
-}
-
-function decreaseQty(e, btn){
-
-  e.preventDefault();
-  e.stopPropagation();
-  e.stopImmediatePropagation();
-
-  const addBtn = btn.parentElement;
-  const qty = addBtn.querySelector(".qty");
-
-  let count = Number(qty.innerText);
-
-  if(count > 1){
-    qty.innerText = count - 1;
-  }else{
-    addBtn.classList.remove("qtyMode");
-
-    addBtn.innerHTML = `<span>+</span>`;
-
-    addBtn.setAttribute(
-      "onclick",
-      "return showQty(event,this)"
-    );
-  }
-
-  return false;
-}
 
 
 
+
+
+
+let popupProduct = null;
+let popupTable = "fresh_products";
 function openProductPopup(product){
-
+popupProduct = product;
+popupTable = product.table || "fresh_products";
   const popup =
   document.getElementById("productPopup");
 
@@ -5476,6 +5458,7 @@ document.getElementById("popupAdditionalInfo").innerText =
       dot.classList.toggle("active", i === index);
     });
   };
+  updatePopupCartButton();
 }
 
 function closeProductPopup(){
@@ -5551,6 +5534,86 @@ function showHighlightMsg(card, text){
   }, 10);
 
 }
+function popupKey(){
+  return `${popupTable}_${popupProduct.id}`;
+}
+
+function popupAddToCart(e){
+  e.preventDefault();
+  e.stopPropagation();
+
+  const key = popupKey();
+
+  if(!cart[key]){
+    cart[key] = {
+      table: popupTable,
+      id: popupProduct.id,
+      name: popupProduct.name,
+      image1: popupProduct.image1,
+      discount_price: popupProduct.discount_price,
+      original_price: popupProduct.original_price,
+      quantity: popupProduct.quantity,
+      unit: popupProduct.unit,
+      qty: 1
+    };
+  }else{
+    cart[key].qty++;
+  }
+
+  saveCart();
+  updatePopupCartButton();
+  restoreCartButtons(document);
+
+  return false;
+}
+
+function updatePopupCartButton(){
+  const btn = document.getElementById("popupAddBtnFixed");
+  const key = popupKey();
+
+  if(cart[key]){
+    btn.innerHTML = `
+      <button onclick="return popupDecrease(event)">−</button>
+      <span class="qty">${cart[key].qty}</span>
+      <button onclick="return popupIncrease(event)">+</button>
+    `;
+  }else{
+    btn.innerHTML = "Add to Cart";
+    btn.setAttribute("onclick","return popupAddToCart(event)");
+  }
+}
+
+function popupIncrease(e){
+  e.preventDefault();
+  e.stopPropagation();
+
+  const key = popupKey();
+  cart[key].qty++;
+
+  saveCart();
+  updatePopupCartButton();
+  restoreCartButtons(document);
+
+  return false;
+}
+
+function popupDecrease(e){
+  e.preventDefault();
+  e.stopPropagation();
+
+  const key = popupKey();
+  cart[key].qty--;
+
+  if(cart[key].qty <= 0){
+    delete cart[key];
+  }
+
+  saveCart();
+  updatePopupCartButton();
+  restoreCartButtons(document);
+
+  return false;
+}
 function renderIngredientsTable(value){
 
   const box =
@@ -5613,6 +5676,7 @@ function showAutoRowShimmer(row){
       <div class="freshProductShimmerQty"></div>
     </div>
   `).join("");
+  restoreCartButtons(row);
 }
 
 async function loadAutoProductRow(row){
@@ -5647,10 +5711,10 @@ async function loadAutoProductRow(row){
   );
 
   row.innerHTML = (data || []).map(p => `
-    <div class="productCard">
+   <div class="productCard" data-id="${p.id}" data-table="${table}">
 
       <div class="productImageWrap"
-           onclick='openProductPopup(${JSON.stringify(p)})'>
+           onclick='openProductPopup(Object.assign(${JSON.stringify(p)}, {table:"${table}"}))'>
 
         <img
           class="productImage"
@@ -5659,14 +5723,14 @@ async function loadAutoProductRow(row){
         >
 
         <button class="addBtn"
-          onclick="return showQty(event,this)">
+          onclick='return addToCart(event,this,${JSON.stringify(p)})'>
           <span>+</span>
         </button>
 
       </div>
 
       <div class="productInfo"
-           onclick='openProductPopup(${JSON.stringify(p)})'>
+           onclick='openProductPopup(Object.assign(${JSON.stringify(p)}, {table:"${table}"}))'>
 
         <div class="priceRow">
           <span class="discountPrice">₹${p.discount_price || 0}</span>
@@ -5683,6 +5747,7 @@ async function loadAutoProductRow(row){
 
     </div>
   `).join("");
+  restoreCartButtons(row);
 }
 
 const autoProductObserver =
@@ -5877,6 +5942,103 @@ loginPopup.addEventListener("touchend", e => {
   }
 
 });
+
+let cart = JSON.parse(localStorage.getItem("cezooCart") || "{}");
+
+function saveCart(){
+  localStorage.setItem("cezooCart", JSON.stringify(cart));
+}
+
+function addToCart(e, btn, product){
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
+
+  const card = btn.closest(".productCard");
+  const table = card.dataset.table;
+  const id = product.id;
+  const key = `${table}_${id}`;
+
+  if(!cart[key]){
+    cart[key] = {
+      table: table,
+      id: id,
+      name: product.name,
+      image1: product.image1,
+      discount_price: product.discount_price,
+      original_price: product.original_price,
+      quantity: product.quantity,
+      unit: product.unit,
+      qty: 1
+    };
+  }else{
+    cart[key].qty++;
+  }
+
+  saveCart();
+  renderCartBtn(btn, key, cart[key].qty);
+  return false;
+}
+
+function renderCartBtn(btn, key, qty){
+  btn.dataset.key = key;
+  btn.classList.add("qtyMode");
+
+  btn.innerHTML = `
+    <button onclick="return decreaseCart(event,this)">−</button>
+    <span class="qty">${qty}</span>
+    <button onclick="return increaseCart(event,this)">+</button>
+  `;
+}
+
+function increaseCart(e, btn){
+  e.preventDefault();
+  e.stopPropagation();
+
+  const addBtn = btn.closest(".addBtn");
+  const key = addBtn.dataset.key;
+
+  cart[key].qty++;
+  saveCart();
+
+  renderCartBtn(addBtn, key, cart[key].qty);
+  return false;
+}
+
+function decreaseCart(e, btn){
+  e.preventDefault();
+  e.stopPropagation();
+
+  const addBtn = btn.closest(".addBtn");
+  const key = addBtn.dataset.key;
+
+  cart[key].qty--;
+
+  if(cart[key].qty <= 0){
+    delete cart[key];
+    saveCart();
+
+    addBtn.classList.remove("qtyMode");
+    addBtn.innerHTML = `<span>+</span>`;
+    return false;
+  }
+
+  saveCart();
+  renderCartBtn(addBtn, key, cart[key].qty);
+  return false;
+}
+
+function restoreCartButtons(row){
+  row.querySelectorAll(".productCard").forEach(card => {
+    const key = `${card.dataset.table}_${card.dataset.id}`;
+    const item = cart[key];
+
+    if(item){
+      const btn = card.querySelector(".addBtn");
+      renderCartBtn(btn, key, item.qty);
+    }
+  });
+}
 </script>
 
 </body>
