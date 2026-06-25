@@ -3278,7 +3278,9 @@ position:relative;
   z-index:999999;
   transition:bottom .35s ease;
 }
-
+.floatBarWrap.popupMode{
+  bottom:18px !important;
+}
 .deliveryFloatBar{
   position:static;
   width:auto;
@@ -3914,6 +3916,7 @@ button{
     transform:translateX(100%);
   }
 }
+
 </style>
 </head>
 
@@ -6603,6 +6606,12 @@ const normalPopupConfigs = {
     subtitle: "Handpicked Daily Essentials",
     table: "grocery_products",
     ids: [14,15,16,17,18,19,20,21]
+  },
+  seeAllBar3 :{
+    title: "Daily Essentials",
+    subtitle: "Handpicked Daily Essentials",
+    table: "fresh_products",
+    ids: [77,78,76,75,74,73,72,71,70,69,68,67,66,65]
   }
 };
 
@@ -6618,18 +6627,20 @@ document.querySelectorAll(".seeAllBar").forEach(bar => {
 });
 
 async function openNormalSeeAllPopup(config){
+    
   document.getElementById("normalPopupTitle").innerText = config.title;
   document.getElementById("normalPopupSub").innerText = config.subtitle || "";
 
   document.getElementById("normalSeeAllPopup").classList.add("open");
   document.body.style.overflow = "hidden";
-
+document.querySelector(".floatBarWrap").classList.add("popupMode");
   await loadNormalPopupProducts(config);
 }
 
 document.getElementById("closeNormalPopup").addEventListener("click", () => {
   document.getElementById("normalSeeAllPopup").classList.remove("open");
   document.body.style.overflow = "";
+  document.querySelector(".floatBarWrap").classList.remove("popupMode");
 });
 
 async function loadNormalPopupProducts(config){
@@ -6690,6 +6701,14 @@ function renderNormalPopupProducts(products, table){
 }
 
 
+
+
+
+
+
+
+
+
 const categoryPopupConfigs = {
   fresh: {
     title: "Fresh",
@@ -6731,7 +6750,7 @@ function openCategory(key){
   document.getElementById("catPopupTitle").innerText = config.title;
   document.getElementById("categoryProductsPopup").classList.add("open");
   document.body.style.overflow = "hidden";
-
+document.querySelector(".floatBarWrap").classList.add("popupMode");
   renderCategoryLeftMenu(config);
   loadCategoryRightProducts(config.categories[0], 0);
 }
@@ -6739,6 +6758,7 @@ function openCategory(key){
 document.getElementById("closeCategoryProductsPopup").addEventListener("click", () => {
   document.getElementById("categoryProductsPopup").classList.remove("open");
   document.body.style.overflow = "";
+  document.querySelector(".floatBarWrap").classList.remove("popupMode");
 });
 
 function renderCategoryLeftMenu(config){
