@@ -6023,7 +6023,9 @@ function decreaseCart(e, btn){
     return false;
   }
 
-  saveCart();
+ saveCart();
+updatePopupCartButton();
+restoreCartButtons(document);
   renderCartBtn(addBtn, key, cart[key].qty);
   return false;
 }
@@ -6031,11 +6033,16 @@ function decreaseCart(e, btn){
 function restoreCartButtons(row){
   row.querySelectorAll(".productCard").forEach(card => {
     const key = `${card.dataset.table}_${card.dataset.id}`;
-    const item = cart[key];
+    const btn = card.querySelector(".addBtn");
 
-    if(item){
-      const btn = card.querySelector(".addBtn");
-      renderCartBtn(btn, key, item.qty);
+    if(!btn) return;
+
+    if(cart[key]){
+      renderCartBtn(btn, key, cart[key].qty);
+    }else{
+      btn.dataset.key = key;
+      btn.classList.remove("qtyMode");
+      btn.innerHTML = `<span>+</span>`;
     }
   });
 }
