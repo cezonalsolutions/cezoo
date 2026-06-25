@@ -3246,33 +3246,76 @@ position:relative;
   align-items:center;
   justify-content:center;
 }
-.deliveryFloatBar{
+.floatBarWrap{
   position:fixed;
-
   left:50%;
-  transform:translateX(-50%);
-  transition: bottom .35s ease;
-
-  width:92%;
-
   bottom:88px;
-
+  transform:translateX(-50%);
+  width:92%;
   height:58px;
-
-  background:#2f3846;
-
-  border-radius:16px;
-
   display:flex;
-  align-items:center;
-
-  padding:0 12px;
-
+  gap:10px;
   z-index:9;
-
-  box-shadow:0 6px 18px rgba(0,0,0,.14);
+  transition:bottom .35s ease;
 }
 
+.deliveryFloatBar{
+  position:static;
+  width:auto;
+  flex:1;
+  height:58px;
+  background:#2f3846;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  padding:0 12px;
+  box-shadow:0 6px 18px rgba(0,0,0,.14);
+  min-width:0;
+}
+.cartFloatBox{
+  width:122px;
+  height:58px;
+  background:#f70854;
+  border-radius:16px;
+  display:none;
+  align-items:center;
+  gap:8px;
+  padding:8px;
+  box-shadow:0 6px 18px rgba(0,0,0,.14);
+  flex-shrink:0;
+}
+
+.cartFloatImg{
+  width:40px;
+  height:40px;
+  border-radius:10px;
+  background:#fff;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.cartFloatImg img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.cartFloatTitle{
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  line-height:1;
+}
+
+.cartFloatCount{
+  margin-top:4px;
+  color:rgba(255,255,255,.78);
+  font-size:13px;
+  font-weight:700;
+  white-space:nowrap;
+}
 .deliveryIcon{
   width:34px;
   height:34px;
@@ -4391,20 +4434,32 @@ button{
 </div>
 
 
+<div class="floatBarWrap">
 
-<div class="deliveryFloatBar">
+  <div class="deliveryFloatBar">
 
-  <div class="deliveryIcon">
-    <i class="fa-solid fa-person-biking"></i>
-  </div>
-
-  <div class="deliveryText">
-    <div class="deliveryTitle">
-      High demand in your area
+    <div class="deliveryIcon">
+      <i class="fa-solid fa-person-biking"></i>
     </div>
 
-    <div class="deliverySub">
-      Shop for ₹199 to unlock free delivery
+    <div class="deliveryText">
+      <div class="deliveryTitle">
+        High demand in your area
+      </div>
+
+      <div class="deliverySub">
+        Shop for ₹199 to unlock free delivery
+      </div>
+    </div>
+
+  </div>
+
+  <div class="cartFloatBox" id="cartFloatBox">
+    <div class="cartFloatImg" id="cartFloatImg"></div>
+
+    <div class="cartFloatText">
+      <div class="cartFloatTitle">Cart</div>
+      <div class="cartFloatCount" id="cartFloatCount">0 items</div>
     </div>
   </div>
 
@@ -5554,13 +5609,16 @@ function popupAddToCart(e){
       original_price: popupProduct.original_price,
       quantity: popupProduct.quantity,
       unit: popupProduct.unit,
-      qty: 1
+      qty: 1,
+addedTime: Date.now()
     };
   }else{
     cart[key].qty++;
+    cart[key].addedTime = Date.now();
   }
 
   saveCart();
+  updateCartFloat();
   updatePopupCartButton();
   restoreCartButtons(document);
 
@@ -5589,8 +5647,10 @@ function popupIncrease(e){
 
   const key = popupKey();
   cart[key].qty++;
+  
 
   saveCart();
+  updateCartFloat();
   updatePopupCartButton();
   restoreCartButtons(document);
 
@@ -5609,6 +5669,7 @@ function popupDecrease(e){
   }
 
   saveCart();
+  updateCartFloat();
   updatePopupCartButton();
   restoreCartButtons(document);
 
@@ -5780,8 +5841,7 @@ document.body.addEventListener("scroll", () => {
   const now = document.body.scrollTop;
 
   const nav = document.querySelector(".bottom-nav");
-  const delivery = document.querySelector(".deliveryFloatBar");
-
+  const delivery = document.querySelector(".floatBarWrap");
   if (!nav || !delivery) return;
 
   if (now > lastScroll + 10) {
@@ -5969,13 +6029,16 @@ function addToCart(e, btn, product){
       original_price: product.original_price,
       quantity: product.quantity,
       unit: product.unit,
-      qty: 1
+      qty: 1,
+addedTime: Date.now()
     };
   }else{
     cart[key].qty++;
+    cart[key].addedTime = Date.now();
   }
 
   saveCart();
+  updateCartFloat();
   renderCartBtn(btn, key, cart[key].qty);
   return false;
 }
@@ -6000,7 +6063,7 @@ function increaseCart(e, btn){
 
   cart[key].qty++;
   saveCart();
-
+updateCartFloat();
   renderCartBtn(addBtn, key, cart[key].qty);
   return false;
 }
@@ -6017,13 +6080,14 @@ function decreaseCart(e, btn){
   if(cart[key].qty <= 0){
     delete cart[key];
     saveCart();
-
+updateCartFloat();
     addBtn.classList.remove("qtyMode");
     addBtn.innerHTML = `<span>+</span>`;
     return false;
   }
 
  saveCart();
+ updateCartFloat();
 updatePopupCartButton();
 restoreCartButtons(document);
   renderCartBtn(addBtn, key, cart[key].qty);
@@ -6046,6 +6110,34 @@ function restoreCartButtons(row){
     }
   });
 }
+function updateCartFloat(){
+  const box = document.getElementById("cartFloatBox");
+  const imgBox = document.getElementById("cartFloatImg");
+  const countBox = document.getElementById("cartFloatCount");
+
+  const items = Object.values(cart || {});
+  const totalQty = items.reduce((sum, item) => sum + Number(item.qty || 0), 0);
+
+  if(totalQty <= 0){
+    box.style.display = "none";
+    return;
+  }
+
+  box.style.display = "flex";
+
+  countBox.innerText = totalQty === 1 ? "1 item" : `${totalQty} items`;
+
+  const lastItem = items.sort(
+  (a,b) => Number(b.addedTime || b.id || 0) - Number(a.addedTime || a.id || 0)
+)[0];
+
+  imgBox.innerHTML = `
+    <img src="${lastItem.image1 || ''}">
+  `;
+}
+document.addEventListener("DOMContentLoaded", () => {
+  updateCartFloat();
+});
 </script>
 
 </body>
