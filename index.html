@@ -17,7 +17,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
+ 
 }
 
 html, body {
@@ -4280,9 +4280,10 @@ button{
 
 
 
+<div id="loginPopup" class="loginPopup" onclick="closeLoginPopup()">
 
-<div id="loginPopup" class="loginPopup">
-<div class="loginPage">
+  <div class="loginPage" onclick="event.stopPropagation()">
+
 
  <div class="bgGrid">
 
@@ -5853,6 +5854,23 @@ function openLoginPopup(){
 function closeLoginPopup(){
   document.getElementById("loginPopup").classList.remove("open");
 }
+let loginStartY = 0;
+
+const loginPopup = document.getElementById("loginPopup");
+
+loginPopup.addEventListener("touchstart", e => {
+  loginStartY = e.touches[0].clientY;
+});
+
+loginPopup.addEventListener("touchend", e => {
+
+  const endY = e.changedTouches[0].clientY;
+
+  if(endY - loginStartY > 100){
+    closeLoginPopup();
+  }
+
+});
 </script>
 
 </body>
