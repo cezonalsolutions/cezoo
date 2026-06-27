@@ -3803,11 +3803,23 @@ button{
 }
 
 .cartPageContent{
-  height:calc(100dvh - 100px - 92px - env(safe-area-inset-top));
+  position:absolute;
+  top:calc(100px + env(safe-area-inset-top));
+  left:0;
+  right:0;
+  bottom:92px;
+
   overflow-y:auto;
   padding:0 16px 130px;
+
   -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+
+  scrollbar-width:none;
+  -ms-overflow-style:none;
 }
+
+
 .cartPageContent > :first-child{
   margin-top:-10px;
 }
@@ -3821,62 +3833,114 @@ button{
   overflow:hidden;
 }
 
-/* DELIVERY CARD */
-.cartDeliveryTop{
-  min-height:58px;
+
+
+
+
+.deliveryInfoBar{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:8px;
-  padding:8px 10px;
-  border-bottom:1px solid #eef0f3;
+  padding:10px 12px;
+  gap:10px;
+  border-bottom:1px solid #ececec;
+}
+
+.deliveryInfoLeft{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.cartDeliveryTop{
+  padding:12px 14px;
+  border-bottom:1px solid #f1f1f1;
 }
 
 .cartDeliveryLeft{
   display:flex;
   align-items:center;
-  gap:9px;
-  min-width:0;
+  gap:12px;   /* increase space between icon and text */
 }
+
+
 
 .cartClockIcon{
   width:38px;
   height:38px;
-  border:1px solid #eee;
-  border-radius:12px;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:20px;
-  flex-shrink:0;
+
+  background:#fff;
+
+  border:1px solid #e7e7e7;
+
+  border-radius:12px;
 }
 
-.cartDeliveryTitle{
-  font-size:15px;
-  font-weight:900;
-  line-height:1.15;
-  white-space:nowrap;
+.cartClockIcon i{
+  font-size:16px;
+  color:#222;
 }
-
-.cartDeliveryItems{
-  font-size:12px;
-  color:#666;
-  margin-top:2px;
+.cartDeliveryTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+  border-bottom:1px solid #f1f1f1;
 }
 
 .scheduleBtn{
-  width:auto;
-  height:34px;
-  margin:0;
-  padding:0 10px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  padding:7px 12px;
+
+  border:1px solid #f1d7b8;
   border-radius:10px;
-  background:#fff;
-  border:1px solid #f3d4b4;
+
+  background:#fffaf4;
+
+  font-size:13px;
+  font-weight:700;
+
   color:#111;
-  font-size:12px;
-  font-weight:900;
-  flex-shrink:0;
 }
+
+.scheduleBtn i{
+  color:#f4a000;
+  font-size:15px;
+}
+
+.deliveryInfoWrap{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.deliveryTimeText{
+  font-size:clamp(12px, 3.8vw, 15px);
+
+  font-weight:800;
+  color:#111;
+
+  line-height:1.1;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.deliveryItemsText{
+  margin-top:3px;
+  font-size:11px;
+  font-weight:600;
+  color:#7a7a7a;
+}
+
 
 /* CART ITEM */
 .cartItem{
@@ -4069,7 +4133,7 @@ button{
 .cartSavingsCard{
   background:#e9fff2;
   padding:12px;
-  margin-bottom:18px;
+  margin-bottom:-90px;
 }
 
 .savingsTop{
@@ -4131,9 +4195,9 @@ button{
   box-shadow:0 -2px 10px rgba(0,0,0,.1);
   z-index:99999999;
 }
-
 .cartPayAmount{
   min-width:0;
+  margin-left:14px;
 }
 
 .cartPayAmount span{
