@@ -6903,6 +6903,65 @@ function renderCategoryPopupProducts(products, table){
 
   restoreCartButtons(right);
 }
+function addEdgeSwipeClose(popupId, closeFn){
+  const popup = document.getElementById(popupId);
+  if(!popup) return;
+
+  let startX = 0;
+  let startY = 0;
+  let edgeSide = "";
+
+  popup.addEventListener("touchstart", e => {
+    const touch = e.touches[0];
+    startX = touch.clientX;
+    startY = touch.clientY;
+
+    const screenW = window.innerWidth;
+
+    if(startX <= 28){
+      edgeSide = "left";
+    }else if(startX >= screenW - 28){
+      edgeSide = "right";
+    }else{
+      edgeSide = "";
+    }
+  });
+
+ popup.addEventListener("touchend", e => {
+  if(!edgeSide) return;
+
+  const touch = e.changedTouches[0];
+  const endX = touch.clientX;
+  const endY = touch.clientY;
+
+  const diffX = endX - startX;
+  const diffY = Math.abs(endY - startY);
+
+  edgeSide = ""; // reset immediately
+
+  if(diffY > 60) return;
+
+  if(diffX > 90){
+    closeFn();
+  }
+
+  if(diffX < -90){
+    closeFn();
+  }
+});
+}
+
+addEdgeSwipeClose("normalSeeAllPopup", () => {
+  document.getElementById("normalSeeAllPopup").classList.remove("open");
+  document.body.style.overflow = "";
+  document.querySelector(".floatBarWrap").classList.remove("popupMode");
+});
+
+addEdgeSwipeClose("categoryProductsPopup", () => {
+  document.getElementById("categoryProductsPopup").classList.remove("open");
+  document.body.style.overflow = "";
+  document.querySelector(".floatBarWrap").classList.remove("popupMode");
+});
 </script>
 
 </body>
