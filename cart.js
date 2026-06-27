@@ -78,19 +78,21 @@ function getCartTotals(){
     totalQty += qty;
   });
 
-  const deliveryFee = 30;
-  const handlingFee = 10;
+const deliveryFee = 35;
 
-  const deliveryPay = itemTotal >= 199 ? 0 : deliveryFee;
-  const handlingPay = itemTotal >= 199 ? 0 : handlingFee;
+/* Handling Fee Logic */
+const handlingFee = 10;
 
-  const toPay = itemTotal + deliveryPay + handlingPay;
+const deliveryPay = 0;
 
-  const savings =
-    (mrpTotal - itemTotal) +
-    (deliveryPay === 0 ? deliveryFee : 0) +
-    (handlingPay === 0 ? handlingFee : 0);
+/* ₹10 only if cart has MORE THAN 15 items */
+const handlingPay = totalQty > 15 ? handlingFee : 0;
 
+const toPay = itemTotal + handlingPay;
+
+const savings =
+  (mrpTotal - itemTotal) +
+  deliveryFee;
   return {
     items,
     mrpTotal,
@@ -123,7 +125,33 @@ function renderCartPage(){
   box.innerHTML = `
     <div class="cartDeliveryCard">
 
-      <div class="cartDeliveryTop"></div>
+   <div class="cartDeliveryTop">
+
+  <div class="cartDeliveryLeft">
+
+    <div class="cartClockIcon">
+      <i class="fa-regular fa-clock"></i>
+    </div>
+
+    <div class="deliveryInfoWrap">
+
+      <div class="deliveryTimeText">
+        Delivering in 6 mins
+      </div>
+
+      <div class="deliveryItemsText">
+        ${t.totalQty} items
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="scheduleBtn">
+    <i class="fa-regular fa-calendar"></i>
+    <span>Schedule</span>
+  </div>
+</div>
 
       ${t.items.map(item => renderCartItemRow(item)).join("")}
 
@@ -172,27 +200,23 @@ function renderCartPage(){
           </strong>
         </div>
 
-        <div class="billRow">
-          <span>Delivery Fee</span>
-          <strong>
-            <del>₹${t.deliveryFee}</del>
-            ${t.deliveryPay === 0 ? "FREE" : "₹" + t.deliveryPay}
-          </strong>
-        </div>
-
-        <div class="billRow">
-          <span>Handling Fee</span>
-          <strong>
-            <del>₹${t.handlingFee}</del>
-            ${t.handlingPay === 0 ? "FREE" : "₹" + t.handlingPay}
-          </strong>
-        </div>
-
+     <div class="billRow">
+  <span>Delivery Fee</span>
+  <strong>
+    <del>₹${t.deliveryFee}</del> FREE
+  </strong>
+</div>
+   <div class="billRow">
+  <span>Handling Fee</span>
+  <strong>
+    ${t.handlingPay === 0 ? "₹0" : "₹10"}
+  </strong>
+</div>
         <div class="billRow billTotal">
           <span>To Pay</span>
           <strong>
-            <del>₹${t.mrpTotal + t.deliveryFee + t.handlingFee}</del>
-            ₹${t.toPay}
+           <del>₹${t.mrpTotal}</del>
+₹${t.toPay}
           </strong>
         </div>
 
@@ -206,20 +230,15 @@ function renderCartPage(){
       </div>
 
       <div class="savingsInner">
-        <div class="savingLine">
-          <span>Discount on MRP</span>
-          <strong>₹${t.mrpTotal - t.itemTotal}</strong>
-        </div>
+       <div class="savingLine">
+  <span>Discount on MRP</span>
+  <strong>₹${t.mrpTotal - t.itemTotal}</strong>
+</div>
 
-        <div class="savingLine">
-          <span>FREE delivery savings</span>
-          <strong>₹${t.deliveryPay === 0 ? t.deliveryFee : 0}</strong>
-        </div>
-
-        <div class="savingLine">
-          <span>Savings on Handling fee</span>
-          <strong>₹${t.handlingPay === 0 ? t.handlingFee : 0}</strong>
-        </div>
+<div class="savingLine">
+  <span>FREE delivery savings</span>
+  <strong>₹${t.deliveryFee}</strong>
+</div>
       </div>
     </div>
   `;
@@ -267,6 +286,9 @@ function renderCartItemRow(item){
 function cartPageIncrease(key){
   if(!cart[key]) return;
 
+  const box = document.getElementById("cartPageContent");
+  const oldScroll = box.scrollTop;
+
   cart[key].qty++;
   cart[key].addedTime = Date.now();
 
@@ -274,7 +296,32 @@ function cartPageIncrease(key){
   updateCartFloat();
   updatePopupCartSummary();
   restoreCartButtons(document);
+
   renderCartPage();
+
+  box.scrollTop = oldScroll;
+}
+
+function cartPageDecrease(key){
+  if(!cart[key]) return;
+
+  const box = document.getElementById("cartPageContent");
+  const oldScroll = box.scrollTop;
+
+  cart[key].qty--;
+
+  if(cart[key].qty <= 0){
+    delete cart[key];
+  }
+
+  saveCart();
+  updateCartFloat();
+  updatePopupCartSummary();
+  restoreCartButtons(document);
+
+  renderCartPage();
+
+  box.scrollTop = oldScroll;
 }
 
 function cartPageDecrease(key){
@@ -295,10 +342,7 @@ function cartPageDecrease(key){
 function applyCoupon(){
   const code = document.getElementById("couponCode").value.trim();
 
-  if(!code){
-    alert("Enter coupon code");
-    return;
-  }
+  if(!code) return;
 
   console.log("Coupon:", code);
 }
