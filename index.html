@@ -4809,6 +4809,34 @@ button{
     transform:translateX(100%);
   }
 }
+.deliveryIcon{
+  position:relative;
+}
+
+.freeProgressRing{
+  position:absolute;
+  inset:-5px;
+  width:44px;
+  height:44px;
+  transform:rotate(-90deg);
+}
+
+.freeProgressRing circle{
+  fill:none;
+  stroke-width:4;
+}
+
+.ringBg{
+  stroke:rgba(255,255,255,.16);
+}
+
+.ringFill{
+  stroke:#fff;
+  stroke-linecap:round;
+  stroke-dasharray:94;
+  stroke-dashoffset:94;
+  transition:stroke-dashoffset .35s ease;
+}
 </style>
 
 </head>
@@ -5792,9 +5820,13 @@ button{
 
   <div class="deliveryFloatBar">
 
-    <div class="deliveryIcon">
-      <i class="fa-solid fa-person-biking"></i>
-    </div>
+  <div class="deliveryIcon">
+  <i class="fa-solid fa-person-biking"></i>
+  <svg class="freeProgressRing" viewBox="0 0 36 36">
+    <circle class="ringBg" cx="18" cy="18" r="15"></circle>
+    <circle class="ringFill" id="freeDeliveryRing" cx="18" cy="18" r="15"></circle>
+  </svg>
+</div>
 
     <div class="deliveryText">
       <div class="deliveryTitle">
@@ -7489,8 +7521,39 @@ function updateCartFloat(){
   const imgBox = document.getElementById("cartFloatImg");
   const countBox = document.getElementById("cartFloatCount");
 
+  const deliveryTitle = document.querySelector(".deliveryTitle");
+  const deliverySub = document.querySelector(".deliverySub");
+  const ring = document.getElementById("freeDeliveryRing");
+
   const items = Object.values(cart || {});
-  const totalQty = items.reduce((sum, item) => sum + Number(item.qty || 0), 0);
+
+  const totalQty = items.reduce((sum, item) => {
+    return sum + Number(item.qty || 0);
+  }, 0);
+
+  const itemTotal = items.reduce((sum, item) => {
+    return sum + Number(item.discount_price || 0) * Number(item.qty || 0);
+  }, 0);
+
+  const target = 199;
+  const pending = Math.max(target - itemTotal, 0);
+
+  const progress = Math.min(itemTotal / target, 1);
+  const offset = 94 - (94 * progress);
+
+  if(ring){
+    ring.style.strokeDashoffset = offset;
+  }
+
+  if(deliveryTitle && deliverySub){
+    if(itemTotal >= target){
+      deliveryTitle.innerText = "Free Delivery Unlocked";
+      deliverySub.innerText = "Your order is eligible for free delivery";
+    }else{
+      deliveryTitle.innerText = "High demand in your area";
+      deliverySub.innerText = `Shop for ₹${pending} more to unlock free delivery`;
+    }
+  }
 
   if(totalQty <= 0){
     box.style.display = "none";
@@ -7499,21 +7562,22 @@ function updateCartFloat(){
 
   box.style.display = "flex";
 
-  countBox.innerText = totalQty === 1 ? "1 item" : `${totalQty} items`;
+  countBox.innerText =
+    totalQty === 1 ? "1 item" : `${totalQty} items`;
 
   const lastItem = items.sort(
-  (a,b) => Number(b.addedTime || b.id || 0) - Number(a.addedTime || a.id || 0)
-)[0];
+    (a,b) => Number(b.addedTime || b.id || 0) - Number(a.addedTime || a.id || 0)
+  )[0];
 
   imgBox.innerHTML = `
-  <div class="cartImgLoader"></div>
+    <div class="cartImgLoader"></div>
 
-  <img
-    src="${lastItem.image1 || ''}"
-    onload="this.previousElementSibling.remove()"
-    onerror="this.previousElementSibling.remove()"
-  >
-`;
+    <img
+      src="${lastItem.image1 || ''}"
+      onload="this.previousElementSibling.remove()"
+      onerror="this.previousElementSibling.remove()"
+    >
+  `;
 }
 document.addEventListener("DOMContentLoaded", () => {
   updateCartFloat();
