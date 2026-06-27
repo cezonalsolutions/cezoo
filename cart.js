@@ -283,24 +283,7 @@ function renderCartItemRow(item){
   `;
 }
 
-function cartPageIncrease(key){
-  if(!cart[key]) return;
 
-  const box = document.getElementById("cartPageContent");
-  const oldScroll = box.scrollTop;
-
-  cart[key].qty++;
-  cart[key].addedTime = Date.now();
-
-  saveCart();
-  updateCartFloat();
-  updatePopupCartSummary();
-  restoreCartButtons(document);
-
-  renderCartPage();
-
-  box.scrollTop = oldScroll;
-}
 
 function cartPageDecrease(key){
   if(!cart[key]) return;
@@ -346,3 +329,49 @@ function applyCoupon(){
 
   console.log("Coupon:", code);
 }
+let cartSwipeStartX = 0;
+let cartSwipeStartY = 0;
+let cartSwipeEdge = "";
+
+const cartPagePopup = document.getElementById("cartPagePopup");
+
+cartPagePopup.addEventListener("touchstart", function(e){
+  const touch = e.touches[0];
+
+  cartSwipeStartX = touch.clientX;
+  cartSwipeStartY = touch.clientY;
+
+  const w = window.innerWidth;
+
+  if(cartSwipeStartX <= 28){
+    cartSwipeEdge = "left";
+  }else if(cartSwipeStartX >= w - 28){
+    cartSwipeEdge = "right";
+  }else{
+    cartSwipeEdge = "";
+  }
+});
+
+cartPagePopup.addEventListener("touchend", function(e){
+  if(!cartSwipeEdge) return;
+
+  const touch = e.changedTouches[0];
+
+  const diffX = touch.clientX - cartSwipeStartX;
+  const diffY = Math.abs(touch.clientY - cartSwipeStartY);
+
+  if(diffY > 60){
+    cartSwipeEdge = "";
+    return;
+  }
+
+  if(cartSwipeEdge === "left" && diffX > 90){
+    closeCartPagePopup();
+  }
+
+  if(cartSwipeEdge === "right" && diffX < -90){
+    closeCartPagePopup();
+  }
+
+  cartSwipeEdge = "";
+});
