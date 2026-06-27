@@ -60,7 +60,8 @@ function showCartPageShimmer(){
     </div>
   `;
 }
-
+let deliveryPartnerTip = 0;
+let selectedInstructions = [];
 function getCartTotals(){
   const items = Object.values(cart || {});
 
@@ -88,8 +89,7 @@ const deliveryPay = 0;
 /* ₹10 only if cart has MORE THAN 15 items */
 const handlingPay = totalQty > 15 ? handlingFee : 0;
 
-const toPay = itemTotal + handlingPay;
-
+const toPay = itemTotal + handlingPay + deliveryPartnerTip;
 const savings =
   (mrpTotal - itemTotal) +
   deliveryFee;
@@ -212,6 +212,14 @@ function renderCartPage(){
     ${t.handlingPay === 0 ? "₹0" : "₹10"}
   </strong>
 </div>
+${deliveryPartnerTip > 0 ? `
+  <div class="billRow">
+    <span>Delivery Partner Tip</span>
+    <strong>₹${deliveryPartnerTip}</strong>
+  </div>
+` : ""}
+
+
         <div class="billRow billTotal">
           <span>To Pay</span>
           <strong>
@@ -222,6 +230,99 @@ function renderCartPage(){
 
       </div>
     </div>
+
+
+
+
+<div class="tipInstructionCard">
+
+  <div class="tipTabs">
+    <button class="tipTab active"
+      onclick="showTipSection('tip',this)">
+      Give a Tip
+    </button>
+
+    <button class="tipTab"
+      onclick="showTipSection('instruction',this)">
+      Delivery Instructions
+    </button>
+  </div>
+
+  <!-- GIVE A TIP -->
+  <div id="tipSection" class="tipSection active">
+
+    <div class="tipContent">
+
+      <div class="tipText">
+
+        <div class="tipHeading">
+          Tip Delivery Partner
+        </div>
+
+        <div class="tipDesc">
+          Help them earn a little extra for their effort. 100% of this tip will go to them.
+        </div>
+
+        <div class="tipSafety">
+          Delivery Partner Safety
+        </div>
+
+      </div>
+
+      <div class="tipImage">
+        <img src="tip.png" alt="">
+      </div>
+
+    </div>
+
+    <div class="tipAmountRow">
+
+   <button class="tipAmountBtn ${deliveryPartnerTip === 10 ? "active" : ""}" onclick="toggleDeliveryTip(10)">₹10</button>
+<button class="tipAmountBtn ${deliveryPartnerTip === 20 ? "active" : ""}" onclick="toggleDeliveryTip(20)">₹20</button>
+<button class="tipAmountBtn ${deliveryPartnerTip === 30 ? "active" : ""}" onclick="toggleDeliveryTip(30)">₹30</button>
+<button class="tipAmountBtn ${deliveryPartnerTip === 40 ? "active" : ""}" onclick="toggleDeliveryTip(40)">₹40</button>
+<button class="tipAmountBtn ${deliveryPartnerTip === 50 ? "active" : ""}" onclick="toggleDeliveryTip(50)">₹50</button>
+    </div>
+
+  </div>
+
+  <!-- DELIVERY INSTRUCTIONS -->
+  <div id="instructionSection" class="tipSection">
+
+    <div class="deliveryInstructionRow">
+
+<button class="instructionBtn ${selectedInstructions.includes("Leave with Security") ? "active" : ""}"
+        onclick='toggleInstruction(this,"Leave with Security")'>
+  <i class="fa-solid fa-shield-heart"></i>
+  <span>Leave with<br>Security</span>
+</button>
+
+<button class="instructionBtn ${selectedInstructions.includes("Leave at Door") ? "active" : ""}"
+        onclick='toggleInstruction(this,"Leave at Door")'>
+  <i class="fa-solid fa-door-open"></i>
+  <span>Leave at<br>Door</span>
+</button>
+
+<button class="instructionBtn ${selectedInstructions.includes("Dont Ring Bell") ? "active" : ""}"
+        onclick='toggleInstruction(this,"Dont Ring Bell")'>
+  <i class="fa-regular fa-bell-slash"></i>
+  <span>Don't Ring<br>Bell</span>
+</button>
+
+<button class="instructionBtn ${selectedInstructions.includes("Beware of Pets") ? "active" : ""}"
+        onclick='toggleInstruction(this,"Beware of Pets")'>
+  <i class="fa-solid fa-paw"></i>
+  <span>Beware of<br>Pets</span>
+</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
 
     <div class="cartSavingsCard">
       <div class="savingsTop">
@@ -240,7 +341,12 @@ function renderCartPage(){
   <strong>₹${t.deliveryFee}</strong>
 </div>
       </div>
+
+      
     </div>
+
+    
+    
   `;
 }
 
@@ -375,3 +481,39 @@ cartPagePopup.addEventListener("touchend", function(e){
 
   cartSwipeEdge = "";
 });
+
+function showTipSection(type, btn){
+
+  document.querySelectorAll(".tipTab")
+    .forEach(x => x.classList.remove("active"));
+
+  btn.classList.add("active");
+
+  document.getElementById("tipSection").classList.remove("active");
+  document.getElementById("instructionSection").classList.remove("active");
+
+  if(type === "tip"){
+    document.getElementById("tipSection").classList.add("active");
+  }else{
+    document.getElementById("instructionSection").classList.add("active");
+  }
+}
+
+function toggleDeliveryTip(amount){
+  deliveryPartnerTip = deliveryPartnerTip === amount ? 0 : amount;
+  renderCartPage();
+}
+
+function toggleInstruction(btn, text){
+  if(selectedInstructions.includes(text)){
+    selectedInstructions = selectedInstructions.filter(x => x !== text);
+  }else{
+    selectedInstructions.push(text);
+  }
+
+  renderCartPage();
+
+  setTimeout(() => {
+    showTipSection("instruction", document.querySelectorAll(".tipTab")[1]);
+  }, 0);
+}
