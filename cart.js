@@ -123,17 +123,7 @@ function renderCartPage(){
   box.innerHTML = `
     <div class="cartDeliveryCard">
 
-      <div class="cartDeliveryTop">
-        <div class="cartDeliveryLeft">
-          <div class="cartClockIcon">↺</div>
-          <div>
-            <div class="cartDeliveryTitle">Delivering in 5 mins</div>
-            <div class="cartDeliveryItems">${t.totalQty} items</div>
-          </div>
-        </div>
-
-        <button class="scheduleBtn">📅 Schedule</button>
-      </div>
+      <div class="cartDeliveryTop"></div>
 
       ${t.items.map(item => renderCartItemRow(item)).join("")}
 
@@ -142,14 +132,37 @@ function renderCartPage(){
       </div>
 
     </div>
+<div class="cartCouponCard">
 
+  <div class="couponTitle">
+    Apply Coupon
+  </div>
+
+  <div class="couponRow">
+
+    <input
+      type="text"
+      id="couponCode"
+      class="couponInput"
+      placeholder="Enter coupon code">
+
+    <button
+      class="applyCouponBtn"
+      onclick="applyCoupon()">
+      APPLY
+    </button>
+
+  </div>
+
+</div>
     <div class="cartBillCard">
 
-      <div class="billHeader">
-        <div class="billIcon">▤</div>
-        <h3>Bill Summary</h3>
-      </div>
-
+    <div class="billHeader">
+  <div class="billIcon">
+    <i class="fa-solid fa-receipt"></i>
+  </div>
+  <h3>Bill Summary</h3>
+</div>
       <div class="billRows">
 
         <div class="billRow">
@@ -226,9 +239,17 @@ function renderCartItemRow(item){
           onerror="this.previousElementSibling.remove()">
       </div>
 
-      <div>
+      <div class="cartItemMiddle">
         <div class="cartItemName">${item.name || ""}</div>
-        <div class="cartItemQty">${item.quantity || ""} ${item.unit || ""}</div>
+
+        <div class="cartItemQty">
+          ${item.quantity || ""} ${item.unit || ""}
+        </div>
+
+        <div class="cartPriceBox">
+          <del>₹${Number(item.original_price || 0) * Number(item.qty || 1)}</del>
+          <span>₹${Number(item.discount_price || 0) * Number(item.qty || 1)}</span>
+        </div>
       </div>
 
       <div class="cartItemRight">
@@ -236,11 +257,6 @@ function renderCartItemRow(item){
           <button onclick="cartPageDecrease('${key}')">−</button>
           <span>${item.qty}</span>
           <button onclick="cartPageIncrease('${key}')">+</button>
-        </div>
-
-        <div class="cartPriceBox">
-          <del>₹${Number(item.original_price || 0) * Number(item.qty || 1)}</del>
-          <span>₹${Number(item.discount_price || 0) * Number(item.qty || 1)}</span>
         </div>
       </div>
 
@@ -275,4 +291,14 @@ function cartPageDecrease(key){
   updatePopupCartSummary();
   restoreCartButtons(document);
   renderCartPage();
+}
+function applyCoupon(){
+  const code = document.getElementById("couponCode").value.trim();
+
+  if(!code){
+    alert("Enter coupon code");
+    return;
+  }
+
+  console.log("Coupon:", code);
 }
