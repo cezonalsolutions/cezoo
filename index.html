@@ -110,7 +110,7 @@ body {
   border-radius: 16px 16px 0 0;
   box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
   transition: bottom 0.3s ease;
-  z-index: 20;
+  z-index: 1999999;
 }
 
 .sheet.open { bottom: 0; }
@@ -3660,14 +3660,13 @@ button{
 .normalSeeAllPopup.open{
   display:block;
 }
-
 .normalPopupHeader{
   position:sticky;
   top:0;
 
-  height:84px;          /* increased */
+  height:90px;          /* increased */
 
-  padding:40px 14px 0;  /* top gap */
+  padding:35px 14px 0;  /* top gap */
 
   background:#fff;
 
@@ -3684,12 +3683,20 @@ button{
 .normalPopupHeader button{
   width:36px;
   height:36px;
+
   margin:0;
+
   border:none;
   background:none;
-  color:#111;
-  font-size:34px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:32px;
   line-height:1;
+
+  padding:0;
 }
 
 .normalPopupHeader h3{
@@ -3738,6 +3745,129 @@ button{
 
 .categoryProductsPopup.open{
   display:block;
+}
+.catPopupHeader{
+  position:sticky;
+  top:0;
+
+  height:84px;
+
+  padding:16px 14px 0;
+
+  background:#fff;
+
+  display:flex;
+  align-items:center;
+
+  gap:12px;
+
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
+
+  z-index:20;
+}
+
+.catPopupHeader button{
+  width:36px;
+  height:36px;
+
+  margin:0;
+  padding:0;
+
+  border:none;
+  background:none;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:30px;
+  font-weight:500;
+  line-height:1;
+
+  color:#111;
+
+  flex-shrink:0;
+}
+
+.catPopupHeader h3{
+  margin:0;
+
+  font-size:18px;
+  font-weight:900;
+
+  line-height:1;
+
+  display:flex;
+  align-items:center;
+
+  height:36px;
+}
+.catPopupHeader h3{
+  margin:0;
+  font-size:18px;
+  font-weight:900;
+
+  position:relative;
+  top:3px;   /* push title down */
+}
+
+.catPopupBody{
+  display:grid;
+  grid-template-columns:82px 1fr;
+  height:calc(100dvh - 64px - env(safe-area-inset-top));
+}
+
+.catPopupLeft{
+  background:#f7f8fa;
+  overflow-y:auto;
+  padding:8px 6px 90px;
+}
+
+.catPopupLeftItem{
+  padding:8px 4px;
+  text-align:center;
+  border-radius:12px;
+  margin-bottom:8px;
+  font-size:10px;
+  font-weight:800;
+  color:#333;
+  cursor:pointer;
+}
+.catPopupLeftItem.active{
+  background:#fff;
+  color:#0BD957;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.catPopupLeftItem img{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 5px;
+}
+.catPopupRight{
+  overflow-y:auto;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px 10px;
+  padding:12px 10px 90px;
+}
+
+.catPopupRight .productCard{
+  flex:none;
+  width:100%;
+}
+.catPopupRight .productImageWrap{
+  height:130px;
+  background:#f7f8fa;
+  border-radius:14px;
+}
+
+.catPopupRight .productImage{
+  width:88%;
+  height:88%;
+  object-fit:contain;
 }
 
 .cartPagePopup{
@@ -4615,6 +4745,69 @@ button{
   border-color:#9ca3af;
   background:#f3f4f6;
   color:#111;
+}
+.catShimmerCard{
+  width:100%;
+}
+
+.catShimmerImg,
+.catShimmerPrice,
+.catShimmerName,
+.catShimmerQty{
+  position:relative;
+  overflow:hidden;
+
+  background:#fdecef; /* light pink */
+
+  border-radius:10px;
+}
+
+.catShimmerImg{
+  height:130px;
+}
+
+.catShimmerPrice{
+  width:62px;
+  height:22px;
+  margin-top:8px;
+}
+
+.catShimmerName{
+  width:90%;
+  height:14px;
+  margin-top:8px;
+}
+
+.catShimmerQty{
+  width:50%;
+  height:11px;
+  margin-top:7px;
+}
+
+.catShimmerImg::after,
+.catShimmerPrice::after,
+.catShimmerName::after,
+.catShimmerQty::after{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  transform:translateX(-100%);
+
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.9),
+    transparent
+  );
+
+  animation:catPopupShimmer 1s linear infinite;
+}
+
+@keyframes catPopupShimmer{
+  100%{
+    transform:translateX(100%);
+  }
 }
 </style>
 
