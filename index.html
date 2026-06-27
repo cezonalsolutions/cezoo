@@ -246,7 +246,73 @@ body {
   color: #666;
   font-weight: 500;
 }
+/* icon */
+.nav-item img{
+  width:22px;
+  height:22px;
+  object-fit:contain;
+  opacity:.7;
+  transition:.2s;
+}
 
+/* text */
+.nav-item span{
+  font-size:10px;
+  color:#666;
+  font-weight:500;
+}
+
+/* active state (except banner) */
+.nav-item.active:not(.nav-banner) img{
+  opacity:1;
+  transform:scale(1.1);
+}
+
+.nav-item.active:not(.nav-banner) span{
+  color:#0b74ff;
+  font-weight:700;
+}
+
+/* Banner */
+.nav-item.nav-banner{
+  flex:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform:translateY(-7px);
+}
+
+/* Banner image */
+.nav-item.nav-banner img{
+  width:42px;
+  height:42px;
+  object-fit:contain;
+  opacity:1 !important;
+  transform:none !important;
+  border-radius:0;
+  box-shadow:none;
+}
+
+/* Never apply active effect to banner */
+.nav-item.nav-banner.active img,
+.nav-item.nav-banner:active img{
+  opacity:1 !important;
+  transform:none !important;
+}
+
+.nav-item.nav-banner.active span{
+  color:#666 !important;
+  font-weight:500 !important;
+}
+
+.content-section{
+  display:none;
+  padding:1px;
+}
+
+.content-section.active{
+  display:block;
+}
 /* active state */
 .nav-item.active img {
   opacity: 1;
@@ -271,6 +337,7 @@ body {
 .nav-item.nav-banner img {
   width: 42px;
   height: 42px;
+  transform:none !important;
   object-fit: contain;
   border-radius: 0;   /* optional: removes rounded feel */
   box-shadow: none;   /* removes box completely */
@@ -1578,7 +1645,7 @@ position:relative;
   background:#fff;
   border-radius:20px 20px 0 0;
   transition:.35s ease;
-  z-index:9999;
+  z-index:9999999;
   display:flex;
   flex-direction:column;
 }
@@ -5879,7 +5946,7 @@ button{
 <div id="creamSplash"></div>
 
 <div class="nav-item nav-banner" onclick="playCreamSplash()">
-  <img id="nav-banner" src="profile/flag.png" />
+  <img id="nav-banner" src="game/banner.png" />
 </div>
 
 
