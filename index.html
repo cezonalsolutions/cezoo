@@ -3916,7 +3916,50 @@ button{
     transform:translateX(100%);
   }
 }
+.cartFloatImg{
+  position:relative;
+  overflow:hidden;
+}
 
+.cartImgLoader{
+  position:absolute;
+  inset:0;
+
+  background:#fdecef;
+
+  border-radius:50%;
+  overflow:hidden;
+}
+
+.cartImgLoader::after{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.9),
+    transparent
+  );
+
+  transform:translateX(-100%);
+
+  animation:cartImgShimmer 1s linear infinite;
+}
+
+@keyframes cartImgShimmer{
+  100%{
+    transform:translateX(100%);
+  }
+}
+
+.cartFloatImg img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+}
 </style>
 </head>
 
@@ -6578,8 +6621,14 @@ function updateCartFloat(){
 )[0];
 
   imgBox.innerHTML = `
-    <img src="${lastItem.image1 || ''}">
-  `;
+  <div class="cartImgLoader"></div>
+
+  <img
+    src="${lastItem.image1 || ''}"
+    onload="this.previousElementSibling.remove()"
+    onerror="this.previousElementSibling.remove()"
+  >
+`;
 }
 document.addEventListener("DOMContentLoaded", () => {
   updateCartFloat();
@@ -6646,8 +6695,19 @@ document.getElementById("closeNormalPopup").addEventListener("click", () => {
 async function loadNormalPopupProducts(config){
   const grid = document.getElementById("normalPopupGrid");
 
-  grid.innerHTML = `<div style="grid-column:1/-1;padding:30px;text-align:center;font-weight:800;">Loading...</div>`;
+  grid.innerHTML = Array(8).fill(`
+  <div class="catShimmerCard">
 
+    <div class="catShimmerImg"></div>
+
+    <div class="catShimmerPrice"></div>
+
+    <div class="catShimmerName"></div>
+
+    <div class="catShimmerQty"></div>
+
+  </div>
+`).join("");
   const cacheKey = `${config.table}_${config.ids.join("_")}`;
 
   if(normalPopupCache[cacheKey]){
