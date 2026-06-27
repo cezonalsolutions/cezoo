@@ -391,27 +391,7 @@ function renderCartItemRow(item){
 
 
 
-function cartPageDecrease(key){
-  if(!cart[key]) return;
 
-  const box = document.getElementById("cartPageContent");
-  const oldScroll = box.scrollTop;
-
-  cart[key].qty--;
-
-  if(cart[key].qty <= 0){
-    delete cart[key];
-  }
-
-  saveCart();
-  updateCartFloat();
-  updatePopupCartSummary();
-  restoreCartButtons(document);
-
-  renderCartPage();
-
-  box.scrollTop = oldScroll;
-}
 
 function cartPageDecrease(key){
   if(!cart[key]) return;
@@ -505,15 +485,11 @@ function toggleDeliveryTip(amount){
 }
 
 function toggleInstruction(btn, text){
+  btn.classList.toggle("active");
+
   if(selectedInstructions.includes(text)){
     selectedInstructions = selectedInstructions.filter(x => x !== text);
   }else{
     selectedInstructions.push(text);
   }
-
-  renderCartPage();
-
-  setTimeout(() => {
-    showTipSection("instruction", document.querySelectorAll(".tipTab")[1]);
-  }, 0);
 }
