@@ -1,14 +1,33 @@
+let gameTimer = null;
+
+function resetGameStart(){
+  clearTimeout(gameTimer);
+
+  const splash = document.getElementById("splashScreen");
+  const main = document.getElementById("mainScreen");
+
+  splash.style.display = "block";
+  main.style.display = "none";
+
+  /* restart animations */
+  splash.style.animation = "none";
+  main.style.animation = "none";
+
+  void splash.offsetWidth;
+
+  splash.style.animation = "";
+  main.style.animation = "";
+}
+
 function openGamePopup(){
   document.getElementById("gamePopup").classList.add("show");
   document.body.style.overflow = "hidden";
 
   document.querySelector(".floatBarWrap")?.style.setProperty("display","none");
 
-  // Start from splash every time
-  document.getElementById("splashScreen").style.display = "block";
-  document.getElementById("mainScreen").style.display = "none";
+  resetGameStart();
 
-  setTimeout(() => {
+  gameTimer = setTimeout(() => {
     document.getElementById("splashScreen").style.display = "none";
     document.getElementById("mainScreen").style.display = "block";
   }, 7000);
@@ -20,13 +39,13 @@ function closeGamePopup(){
 
   document.querySelector(".floatBarWrap")?.style.removeProperty("display");
 
-  updateCartFloat();
+  clearTimeout(gameTimer);
+  resetGameStart();
 
-  // Reset so next open starts from the beginning
-  document.getElementById("splashScreen").style.display = "block";
-  document.getElementById("mainScreen").style.display = "none";
+  updateCartFloat();
 }
 
+/* Swipe both sides close */
 let gameSwipeStartX = 0;
 let gameSwipeStartY = 0;
 let gameSwipeEdge = "";
