@@ -1,13 +1,17 @@
-setTimeout(function(){
-    document.getElementById("splashScreen").style.display="none";
-    document.getElementById("mainScreen").style.display="block";
-},7000);
-
 function openGamePopup(){
   document.getElementById("gamePopup").classList.add("show");
   document.body.style.overflow = "hidden";
 
   document.querySelector(".floatBarWrap")?.style.setProperty("display","none");
+
+  // Start from splash every time
+  document.getElementById("splashScreen").style.display = "block";
+  document.getElementById("mainScreen").style.display = "none";
+
+  setTimeout(() => {
+    document.getElementById("splashScreen").style.display = "none";
+    document.getElementById("mainScreen").style.display = "block";
+  }, 7000);
 }
 
 function closeGamePopup(){
@@ -16,7 +20,11 @@ function closeGamePopup(){
 
   document.querySelector(".floatBarWrap")?.style.removeProperty("display");
 
-  updateCartFloat(); // restore cart/delivery normal state
+  updateCartFloat();
+
+  // Reset so next open starts from the beginning
+  document.getElementById("splashScreen").style.display = "block";
+  document.getElementById("mainScreen").style.display = "none";
 }
 
 let gameSwipeStartX = 0;
