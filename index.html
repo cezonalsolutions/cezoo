@@ -8,9 +8,13 @@
 rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <!-- FONT -->
+ <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@800&display=swap" rel="stylesheet">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bungee&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
 
 <style>
 * {
@@ -3434,6 +3438,9 @@ position:relative;
 
 .deliveryText{
   flex:1;
+  min-width:0;
+  width:0;
+  overflow:hidden;
 }
 
 .deliveryTitle{
@@ -4910,9 +4917,69 @@ button{
   transition:stroke-dashoffset .35s ease;
 }
 
+.gamePopup{
+  position:fixed;
+  inset:0;
+  width:100vw;
+  height:100dvh;
 
+  background:linear-gradient(
+    to bottom,
+    #f7f2ff 0%,
+    #fcf9ff 12%,
+    #ffffff 28%,
+    #f4fbff 55%,
+    #e8f8ff 78%,
+    #d8f2ff 100%
+  );
+
+  z-index:999999;
+
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(100%);
+  transition:.35s ease;
+}
+
+.gamePopup.show{
+  opacity:1;
+  visibility:visible;
+  transform:translateY(0);
+}
+
+.gameSheet{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  background:transparent;
+  overflow:hidden;
+}
+
+.gameHandle{
+  display:none;
+}
+
+.gameBody{
+  position:relative;
+  width:100%;
+  height:100dvh;
+  padding:0;
+  margin:0;
+  overflow:hidden;
+  background:transparent;
+}
+
+/* Fix play button right side issue */
+.gameBody .playNowBtn{
+  left:16px;
+  right:16px;
+  width:auto;
+  max-width:none;
+}
 </style>
 <link rel="stylesheet" href="xerox.css">
+<link rel="stylesheet" href="game.css">
 
 </head>
 
@@ -5961,6 +6028,80 @@ button{
 </div>
 </div>
 
+<div id="gamePopup" class="gamePopup">
+
+  <div class="gameSheet">
+
+    <div class="gameHandle"></div>
+
+    <div class="gameBody">
+
+     <div id="splashScreen">
+<!-- Background Clouds -->
+<div class="cloud c1"></div>
+<div class="cloud c2"></div>
+<div class="cloud c3"></div>
+<div class="cloud c4"></div>
+<div class="cloud c5"></div>
+<div class="cloud c6"></div>
+<div class="container">
+
+    <div class="leftSide">
+        <div class="logois">CEZOO</div>
+        <div class="tagline">Delivery in Minutes</div>
+    </div>
+
+    <div class="vLine"></div>
+
+    <div class="rightSide">
+        <img src="game/flad3.png" alt="">
+    </div>
+
+</div>
+<div class="poweredBy">
+    <span>Cezonal Solutions Pvt. Ltd.</span>
+</div>
+
+<img class="heroImage" src="game/banner1.png" alt="">
+</div>
+<div id="mainScreen" style="display:none;">
+
+    <img class="topLeaves" src="game/ok4.png" alt="Leaves">
+
+    <div class="heroBanner">
+        <img class="iceCream" src="game/banner5.png" alt="">
+    </div>
+
+
+    <div class="howCard">
+
+    <div class="howHeader">
+        HOW IT WORKS
+    </div>
+
+    <div class="videoBox">
+        <video autoplay muted loop playsinline>
+            <source src="" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="howFooter">
+    <span class="proTip">PRO TIP :</span>
+    <span class="tipText">Watch the full video once.</span>
+</div>
+</div>
+<button class="playNowBtn">PLAY NOW</button>
+</div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
 
 
 <div id="loginPopup" class="loginPopup" onclick="closeLoginPopup()">
@@ -6097,13 +6238,11 @@ button{
   <img id="nav-xerox" src="navbar/paper.png">
   <span>Xerox</span>
 </div>
-
 <div id="creamSplash"></div>
 
-<div class="nav-item nav-banner" onclick="playCreamSplash()">
-  <img id="nav-banner" src="game/banner.png" />
+<div class="nav-item nav-banner" onclick="openGameBanner()">
+  <img id="nav-banner" src="game/banner.png">
 </div>
-
 
 </div>
 <!-- OVERLAY -->
@@ -6379,7 +6518,7 @@ button{
 
 </div>
 </div>
-
+<script src="game.js"></script>
 <script src="login.js"></script>
 <script src="xerox.js"></script>
 <script src="cart.js"></script>
@@ -6709,19 +6848,21 @@ function closeCategorySheet(){
   document.getElementById("categorySheet").classList.remove("open");
   document.getElementById("categoryOverlay").classList.remove("open");
 }
-function playCreamSplash() {
-  const splash = document.getElementById("creamSplash");
+function openGameBanner(){
+  playCreamSplash();
 
-  // reset animation
-  splash.classList.remove("active");
-
-  // force reflow (IMPORTANT trick)
-  void splash.offsetWidth;
-
-  // restart animation
-  splash.classList.add("active");
+  setTimeout(() => {
+    openGamePopup();
+  }, 900); // match your splash animation duration
 }
 
+function playCreamSplash(){
+  const splash = document.getElementById("creamSplash");
+
+  splash.classList.remove("active");
+  void splash.offsetWidth;
+  splash.classList.add("active");
+}
 
 
 
@@ -7630,7 +7771,7 @@ function updateCartFloat(){
       deliverySub.innerText = "Your order is eligible for free delivery";
     }else{
       deliveryTitle.innerText = "High demand in your area";
-      deliverySub.innerText = `Shop for ₹${pending} more to unlock free delivery`;
+      deliverySub.innerText = `Shop for ₹${pending} to unlock free delivery`;
     }
   }
 
