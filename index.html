@@ -4909,7 +4909,10 @@ button{
   stroke-dashoffset:94;
   transition:stroke-dashoffset .35s ease;
 }
+
+
 </style>
+<link rel="stylesheet" href="xerox.css">
 
 </head>
 
@@ -5812,6 +5815,154 @@ button{
 
 </div>
 
+
+<div id="xeroxPopup" class="xeroxPopup">
+
+      <div class="xeroxSheet">
+
+        <div class="xeroxHandle"></div>
+
+        <div class="xeroxBody">
+
+ <div class="xeroxApp">
+
+  <section class="hero">
+
+    <div class="safe">SAFE ✦ SECURE ✦ INSTANT</div>
+
+    <div class="logo">cezooprints</div>
+
+    <div class="tag">in 4 mins</div>
+
+    <div class="table"></div>
+
+    <div class="scissor">✂️</div>
+    <div class="paper"></div>
+
+    <!-- Insert your printer image here -->
+    <div class="printer-box">
+      <img src="printer.webp" alt="Printer Image">
+    </div>
+
+  </section>
+
+  <section class="offer">
+    <h2>Get your first print <span>FREE</span></h2>
+
+    <p>• A4 size prints</p>
+    <p>• 75 GSM paper quality</p>
+
+    <input type="file" id="pdfUpload" accept="application/pdf" hidden>
+
+<label for="pdfUpload" class="upload">
+  Upload Document
+</label>
+
+
+<div class="upload-popup" id="uploadPopup">
+  <div class="upload-card" id="uploadCard">
+    <button class="upload-close" id="cancelUpload" type="button" aria-label="Cancel upload">×</button>
+
+    <div class="upload-top">
+      <div class="upload-symbol">⬆️</div>
+      <div class="upload-info">
+        <h3 id="uploadTitle">Uploading PDF...</h3>
+        <p id="uploadText">Please wait while your document is uploading.</p>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="progress-percent" id="progressPercent">0%</div>
+  </div>
+</div>
+
+    <p class="note">*Offer applies to 10 pages of BW or ₹30 max discount on color</p>
+  </section>
+
+<section class="promise-section">
+
+  <h2 class="promise-title">WE PROMISE</h2>
+
+  <div class="promise-board">
+
+    <div class="sticky-card safety-card">
+      <div class="promise-icon">🛡️</div>
+      <h3>Safety</h3>
+      <p>Documents are deleted once printed.</p>
+      <span class="fold"></span>
+    </div>
+
+    <div class="sticky-card security-card">
+      <div class="promise-icon">🔒</div>
+      <h3>Security</h3>
+      <p>Prints are sealed before delivery.</p>
+    </div>
+
+    <div class="wide-policy-card">
+      <div class="policy-icon">🙈</div>
+      <div>
+        <h3>No Peek Policy</h3>
+        <p>Our staff will not look at your documents.</p>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+  <div class="faq-head">
+    <span>HELP CENTER</span>
+    <h2>FAQ</h2>
+    <p>Common questions about CEZOO Prints.</p>
+  </div>
+
+  <div class="faq-list">
+
+    <details class="faq-item">
+      <summary>What document format can I print?</summary>
+      <p>You can upload PDF, JPG, PNG, Word documents, assignments, resumes and office files.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>What printing options can I choose from?</summary>
+      <p>You can choose black & white, colour print, A4 size, photo print, binding, business cards and labels.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>How do I upload my documents?</summary>
+      <p>Click the Upload Document button, select your file, choose print options and place your order.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Are my documents safe?</summary>
+      <p>Yes. Your documents are handled securely and deleted after printing.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>How fast will my prints be delivered?</summary>
+      <p>CEZOO Prints delivers your printed documents quickly to your doorstep based on your location.</p>
+    </details>
+
+    <details class="faq-item">
+      <summary>Can I order bulk printing?</summary>
+      <p>Yes. You can order bulk prints for offices, schools, colleges, events and business needs.</p>
+    </details>
+
+  </div>
+
+</section>
+
+</div>
+
+</div>
+</div>
+</div>
+
+
+
 <div id="loginPopup" class="loginPopup" onclick="closeLoginPopup()">
 
   <div class="loginPage" onclick="event.stopPropagation()">
@@ -5942,7 +6093,7 @@ button{
     <span>Buy Again</span>
   </div>
 
-  <div class="nav-item" onclick="window.location.href='xerox.html'">
+  <div class="nav-item" onclick="openXeroxPopup()">
   <img id="nav-xerox" src="navbar/paper.png">
   <span>Xerox</span>
 </div>
@@ -6230,7 +6381,7 @@ button{
 </div>
 
 
-
+<script src="xerox.js"></script>
 <script src="cart.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
