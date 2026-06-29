@@ -543,14 +543,6 @@
     45%{transform:scale(1.18)}
     100%{transform:scale(1)}
 }
-body{
-    min-height:100svh;
-    overflow:hidden;
-    position:relative;
-    font-family:Arial,sans-serif;
-    background:rgba(70,190,255,.50);
-
-}
 
 /* Blue layer move from down to up */
 .skyOverlay{
