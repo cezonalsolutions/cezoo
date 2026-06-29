@@ -719,3 +719,194 @@
     50%{transform:scale(1.8)}
     100%{transform:scale(1)}
 }
+
+
+.couponScreen{
+    width:100%;
+    min-height:100vh;
+    padding-top:55px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+    position:relative;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+
+    background:linear-gradient(
+        180deg,
+        #fff7c6 0%,
+        #ffe36b 45%,
+        #ffc928 100%
+    );
+}
+
+.couponScreen::before{
+    content:"";
+    position:absolute;
+    top:120px;
+    width:360px;
+    height:360px;
+    border-radius:50%;
+    background:radial-gradient(
+        circle,
+        rgba(255,255,255,.85) 0%,
+        rgba(255,255,255,0) 72%
+    );
+}
+
+.scoreBox{
+    text-align:center;
+    z-index:3;
+}
+
+.scoreTitle{
+    font-size:14px;
+    font-weight:700;
+    letter-spacing:2px;
+    color:#6d4b00;
+    margin-bottom:4px;
+}
+
+.scoreNumber{
+    font-size:54px;
+    font-weight:900;
+    color:#8b1c1c;
+    line-height:1;
+    text-shadow:0 3px 8px rgba(255,255,255,.4);
+}
+
+.ticket{
+    position:relative;
+    width:285px;
+    background:#fff7fc;
+    padding:18px 15px;
+    text-align:center;
+    transform:rotate(-7deg);
+    border-radius:12px;
+    z-index:2;
+
+    box-shadow:
+        0 8px 0 #ff5313,
+        0 16px 28px rgba(0,0,0,.18);
+
+    clip-path:polygon(
+        0 0,100% 0,
+        100% 8%,97% 11%,100% 14%,
+        100% 24%,97% 27%,100% 30%,
+        100% 40%,97% 43%,100% 46%,
+        100% 56%,97% 59%,100% 62%,
+        100% 72%,97% 75%,100% 78%,
+        100% 88%,97% 91%,100% 94%,
+        100% 100%,0 100%,
+        0 94%,3% 91%,0 88%,
+        0 78%,3% 75%,0 72%,
+        0 62%,3% 59%,0 56%,
+        0 46%,3% 43%,0 40%,
+        0 30%,3% 27%,0 24%,
+        0 14%,3% 11%,0 8%
+    );
+}
+
+.topi{
+    color:#9c6d83;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:4px;
+    margin-bottom:6px;
+}
+
+.offered{
+    color:#8b1c1c;
+    font-size:50px;
+    font-weight:900;
+    line-height:1;
+}
+
+.offer span{
+    font-size:40px;
+}
+
+.upto{
+    margin-top:6px;
+    color:#333;
+    font-size:18px;
+    font-weight:700;
+    letter-spacing:2px;
+}
+
+.dash{
+    border-top:2px dashed #ddd;
+    margin:14px 0;
+}
+
+.bottom{
+    color:#b58ca2;
+    font-size:11px;
+    line-height:1.45;
+    font-weight:600;
+}
+
+.redeemBtn{
+    position:absolute;
+    left:20px;
+    right:20px;
+    bottom:25px;
+
+    height:52px;
+    border:none;
+    border-radius:18px;
+    background:#111;
+    color:#fff;
+    font-size:17px;
+    font-weight:800;
+    letter-spacing:.5px;
+    z-index:3;
+}
+.arcScroller{
+    width:100%;
+    height:200px;
+    overflow:hidden;
+    position:relative;
+    z-index:3;
+
+    margin-top:40px;   /* Increase this (30px, 40px, 50px) as needed */
+}
+
+.arcTrack{
+    display:flex;
+    align-items:flex-end;
+    gap:18px;
+    width:max-content;
+    animation:none;
+}
+
+.couponScreen.playArc .arcTrack{
+    animation:arcScroll 14s linear infinite;
+}
+
+.arcImg{
+    width:110px;
+    height:115px;
+    object-fit:contain;
+    flex-shrink:0;
+}
+
+/* Smooth Arc (12 images) */
+.a1  {transform:translateY(70px) rotate(-24deg);}
+.a2  {transform:translateY(55px) rotate(-20deg);}
+.a3  {transform:translateY(40px) rotate(-15deg);}
+.a4  {transform:translateY(25px) rotate(-10deg);}
+.a5  {transform:translateY(12px) rotate(-5deg);}
+.a6  {transform:translateY(0px) rotate(-2deg);}
+.a7  {transform:translateY(0px) rotate(2deg);}
+.a8  {transform:translateY(12px) rotate(5deg);}
+.a9  {transform:translateY(25px) rotate(10deg);}
+.a10 {transform:translateY(40px) rotate(15deg);}
+.a11 {transform:translateY(55px) rotate(20deg);}
+.a12 {transform:translateY(70px) rotate(24deg);}
+
+@keyframes arcScroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+}
