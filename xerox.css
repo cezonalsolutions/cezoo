@@ -106,7 +106,19 @@
   background:#ffc400;
   box-shadow:15px -8px 0 #ffc400,30px -18px 0 #ffc400;
 }
+.offerTitle{
+    font-size:28px;
+    font-weight:800;
+    color:#111;
+    line-height:1.2;
+    margin-bottom:16px;
+}
 
+.offerTitle .freeText{
+    color:#16c75c;
+    font-weight:900;
+    font-size:22px; /* Reduce this as needed */
+}
 /* OFFER */
 .offer{
   margin:-25px 18px 35px;
