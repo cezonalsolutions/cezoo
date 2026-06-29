@@ -27,7 +27,9 @@ function openGamePopup(){
 
   clearInterval(timerInterval);
   running = false;
-
+const coupon = document.getElementById("couponResultScreen");
+coupon.style.display = "none";
+coupon.classList.remove("playArc");
   document.getElementById("gameIntroScreen").style.display = "none";
   hideIntroSteps();
 
@@ -41,7 +43,9 @@ function openGamePopup(){
 function closeGamePopup(){
   document.getElementById("gamePopup").classList.remove("show");
   document.body.style.overflow = "";
-
+const coupon = document.getElementById("couponResultScreen");
+coupon.style.display = "none";
+coupon.classList.remove("playArc");
   document.querySelector(".floatBarWrap")?.style.removeProperty("display");
 
   clearTimeout(gameTimer);
@@ -280,8 +284,8 @@ function startTimer(){
       scoreEl.classList.add("finalZoom");
 
       setTimeout(()=>{
-        closeGamePopup();
-      },1200);
+  showCouponResult();
+},1200);
     }
   },1000);
 }
@@ -383,4 +387,146 @@ if(displayScore > maxScore){
     waterLayer.style.transform = `translateY(-${moveUp}px)`;
 
     requestAnimationFrame(detectVoice);
+}
+
+
+
+function showCouponResult(){
+  const coupon = document.getElementById("couponResultScreen");
+
+  document.getElementById("gameIntroScreen").style.display = "none";
+  hideIntroSteps();
+
+  coupon.style.display = "flex";
+  coupon.classList.add("playArc");
+
+  document.getElementById("couponScoreNumber").innerText = maxScore;
+}
+
+function generateCouponCode(){
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const numbers = "0123456789";
+
+  let code = "";
+
+  for(let i = 0; i < 4; i++){
+    code += letters[Math.floor(Math.random() * letters.length)];
+  }
+
+  for(let i = 0; i < 2; i++){
+    code += numbers[Math.floor(Math.random() * numbers.length)];
+  }
+
+  return code;
+}
+
+function getDiscountByScore(score){
+  if(score < 50){
+    return {
+      won:false,
+      title:"BETTER LUCK NEXT TIME",
+      percent:"0%",
+      amount:"0",
+      code:""
+    };
+  }
+
+  if(score >= 50 && score < 60){
+    return {
+      won:true,
+      title:"YOU WON EXTRA",
+      percent:"18%",
+      amount:"150",
+      code:generateCouponCode()
+    };
+  }
+
+  if(score >= 60 && score < 70){
+    return {
+      won:true,
+      title:"YOU WON EXTRA",
+      percent:"8%",
+      amount:"100",
+      code:generateCouponCode()
+    };
+  }
+
+  if(score >= 70 && score < 80){
+    return {
+      won:true,
+      title:"YOU WON EXTRA",
+      percent:"12%",
+      amount:"120",
+      code:generateCouponCode()
+    };
+  }
+
+  if(score >= 80 && score < 90){
+    return {
+      won:true,
+      title:"YOU WON EXTRA",
+      percent:"15%",
+      amount:"150",
+      code:generateCouponCode()
+    };
+  }
+
+  return {
+    won:true,
+    title:"YOU WON EXTRA",
+    percent:"20%",
+    amount:"200",
+    code:generateCouponCode()
+  };
+}
+function showCouponResult(){
+  const coupon = document.getElementById("couponResultScreen");
+
+  document.getElementById("gameIntroScreen").style.display = "none";
+  hideIntroSteps();
+
+  const result = getDiscountByScore(maxScore);
+
+  coupon.style.display = "flex";
+  coupon.classList.add("playArc");
+
+  document.getElementById("couponScoreNumber").innerText = maxScore;
+
+  const topText = coupon.querySelector(".top");
+  const offerBox = coupon.querySelector(".offer");
+  const uptoBox = coupon.querySelector(".upto");
+  const bottomText = coupon.querySelector(".bottom");
+  const redeemBtn = coupon.querySelector(".redeemBtn");
+
+  if(result.won){
+    topText.innerText = "YOU WON EXTRA";
+    offerBox.innerHTML = `
+      <span id="offerPercent">${result.percent}</span>
+      <span>OFF</span>
+    `;
+    uptoBox.innerHTML = `UP TO ₹<span id="offerAmount">${result.amount}</span>`;
+
+    bottomText.innerHTML = `
+      Coupon Code: <b>${result.code}</b><br>
+      Applicable on your next order
+    `;
+
+    redeemBtn.innerText = "REDEEM NOW";
+  }else{
+    topText.innerText = "OOPS!";
+    offerBox.innerHTML = `
+      <span style="font-size:32px;">BETTER</span><br>
+      <span style="font-size:32px;">LUCK NEXT</span>
+    `;
+    uptoBox.innerHTML = `TRY AGAIN`;
+
+    bottomText.innerHTML = `
+      You need 50+ score to unlock coupon<br>
+      Shout louder and win discount
+    `;
+
+    redeemBtn.innerText = "TRY AGAIN";
+  }
+
+  redeemBtn.style.display = "block";
 }
