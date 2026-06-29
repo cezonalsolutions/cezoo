@@ -616,10 +616,7 @@
 /* ================= PC VIEW ================= */
 @media(min-width:900px){
 
-  body{
-    padding:30px;
-    background:#eaf6ff;
-  }
+  
 
   .app{
     max-width:1180px;
