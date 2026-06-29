@@ -419,66 +419,26 @@ function generateCouponCode(){
 
   return code;
 }
-
 function getDiscountByScore(score){
   if(score < 50){
-    return {
-      won:false,
-      title:"BETTER LUCK NEXT TIME",
-      percent:"0%",
-      amount:"0",
-      code:""
-    };
+    return { won:false };
   }
 
-  if(score >= 50 && score < 60){
-    return {
-      won:true,
-      title:"YOU WON EXTRA",
-      percent:"18%",
-      amount:"150",
-      code:generateCouponCode()
-    };
+  if(score < 60){
+    return { won:true, percent:"10%", amount:"150" };
   }
 
-  if(score >= 60 && score < 70){
-    return {
-      won:true,
-      title:"YOU WON EXTRA",
-      percent:"8%",
-      amount:"100",
-      code:generateCouponCode()
-    };
+  if(score < 70){
+    return { won:true, percent:"12%", amount:"180" };
   }
 
-  if(score >= 70 && score < 80){
-    return {
-      won:true,
-      title:"YOU WON EXTRA",
-      percent:"12%",
-      amount:"120",
-      code:generateCouponCode()
-    };
+  if(score < 80){
+    return { won:true, percent:"15%", amount:"200" };
   }
 
-  if(score >= 80 && score < 90){
-    return {
-      won:true,
-      title:"YOU WON EXTRA",
-      percent:"15%",
-      amount:"150",
-      code:generateCouponCode()
-    };
-  }
-
-  return {
-    won:true,
-    title:"YOU WON EXTRA",
-    percent:"20%",
-    amount:"200",
-    code:generateCouponCode()
-  };
+  return { won:true, percent:"20%", amount:"250" };
 }
+
 function showCouponResult(){
   const coupon = document.getElementById("couponResultScreen");
 
@@ -501,17 +461,12 @@ function showCouponResult(){
     topText.innerText = "YOU WON EXTRA";
 
     offerBox.innerHTML = `
-      <span id="offerPercent">${result.percent}</span>
+      <span>${result.percent}</span>
       <span>OFF</span>
     `;
 
     uptoBox.style.display = "block";
-    uptoBox.innerHTML = `UP TO ₹<span id="offerAmount">${result.amount}</span>`;
-
-    bottomText.innerHTML = `
-      Applicable on Ordering Select Ice Creams<br>
-      &amp; Frozen Desserts above ₹150
-    `;
+    uptoBox.innerHTML = `UP TO ₹<span>${result.amount}</span>`;
   }else{
     topText.innerText = "OOPS!";
 
@@ -522,10 +477,11 @@ function showCouponResult(){
 
     uptoBox.style.display = "block";
     uptoBox.innerHTML = "&nbsp;";
-
-    bottomText.innerHTML = `
-      Applicable on Ordering Select Items <br>
-      &amp; Frozen Desserts above ₹150
-    `;
   }
+
+  bottomText.innerHTML = `
+    Applicable on Ordering Select Items<br>
+    above ₹150
+  `;
 }
+
