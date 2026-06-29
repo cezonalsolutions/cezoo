@@ -492,41 +492,40 @@ function showCouponResult(){
 
   document.getElementById("couponScoreNumber").innerText = maxScore;
 
-  const topText = coupon.querySelector(".top");
-  const offerBox = coupon.querySelector(".offer");
+  const topText = coupon.querySelector(".topi");
+  const offerBox = coupon.querySelector(".offered");
   const uptoBox = coupon.querySelector(".upto");
   const bottomText = coupon.querySelector(".bottom");
-  const redeemBtn = coupon.querySelector(".redeemBtn");
 
   if(result.won){
     topText.innerText = "YOU WON EXTRA";
+
     offerBox.innerHTML = `
       <span id="offerPercent">${result.percent}</span>
       <span>OFF</span>
     `;
+
+    uptoBox.style.display = "block";
     uptoBox.innerHTML = `UP TO ₹<span id="offerAmount">${result.amount}</span>`;
 
     bottomText.innerHTML = `
-      Coupon Code: <b>${result.code}</b><br>
-      Applicable on your next order
+      Applicable on Ordering Select Ice Creams<br>
+      &amp; Frozen Desserts above ₹150
     `;
-
-    redeemBtn.innerText = "REDEEM NOW";
   }else{
     topText.innerText = "OOPS!";
+
     offerBox.innerHTML = `
-      <span style="font-size:32px;">BETTER</span><br>
-      <span style="font-size:32px;">LUCK NEXT</span>
+      <span style="font-size:30px;line-height:1.1;">BETTER LUCK</span><br>
+      <span style="font-size:30px;line-height:1.1;">NEXT TIME</span>
     `;
-    uptoBox.innerHTML = `TRY AGAIN`;
+
+    uptoBox.style.display = "block";
+    uptoBox.innerHTML = "&nbsp;";
 
     bottomText.innerHTML = `
-      You need 50+ score to unlock coupon<br>
-      Shout louder and win discount
+      Applicable on Ordering Select Items <br>
+      &amp; Frozen Desserts above ₹150
     `;
-
-    redeemBtn.innerText = "TRY AGAIN";
   }
-
-  redeemBtn.style.display = "block";
 }
