@@ -25,6 +25,12 @@ function openGamePopup(){
 
   document.querySelector(".floatBarWrap")?.style.setProperty("display","none");
 
+  clearInterval(timerInterval);
+  running = false;
+
+  document.getElementById("gameIntroScreen").style.display = "none";
+  hideIntroSteps();
+
   resetGameStart();
 
   gameTimer = setTimeout(() => {
@@ -32,7 +38,6 @@ function openGamePopup(){
     document.getElementById("mainScreen").style.display = "block";
   }, 3000);
 }
-
 function closeGamePopup(){
   document.getElementById("gamePopup").classList.remove("show");
   document.body.style.overflow = "";
@@ -40,6 +45,16 @@ function closeGamePopup(){
   document.querySelector(".floatBarWrap")?.style.removeProperty("display");
 
   clearTimeout(gameTimer);
+  clearTimeout(introTimer1);
+  clearTimeout(introTimer2);
+  clearTimeout(introTimer3);
+  clearInterval(timerInterval);
+
+  running = false;
+
+  document.getElementById("gameIntroScreen").style.display = "none";
+  hideIntroSteps();
+
   resetGameStart();
 
   updateCartFloat();
@@ -86,6 +101,7 @@ gamePopup.addEventListener("touchend", function(e){
   }
 });
 
+
 let introTimer1, introTimer2, introTimer3;
 
 function hideIntroSteps(){
@@ -93,10 +109,30 @@ function hideIntroSteps(){
     .forEach(step => step.classList.remove("active"));
 }
 
-function startGameIntro(){
+async function startGameIntro(){
   clearTimeout(introTimer1);
   clearTimeout(introTimer2);
   clearTimeout(introTimer3);
+
+  // mic asks ONLY after Play Now click
+  try{
+    if(!micStream){
+      micStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+
+      audioContext = new AudioContext();
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 512;
+      analyser.smoothingTimeConstant = .92;
+
+      const mic = audioContext.createMediaStreamSource(micStream);
+      mic.connect(analyser);
+
+      dataArray = new Uint8Array(analyser.frequencyBinCount);
+    }
+  }catch(err){
+    alert("Please allow microphone permission.");
+    return;
+  }
 
   document.getElementById("mainScreen").style.display = "none";
   document.getElementById("gameIntroScreen").style.display = "block";
@@ -112,43 +148,232 @@ function startGameIntro(){
   introTimer2 = setTimeout(() => {
     hideIntroSteps();
     document.getElementById("countStep").classList.add("active");
-let count = 3;
-const countEl = document.getElementById("countNumber");
 
-showCount();
+    let count = 3;
+    const countEl = document.getElementById("countNumber");
 
-function showCount(){
+    function showCount(){
+      countEl.className = "countNumber";
 
-    countEl.className = "countNumber";
-
-    if(count === 3){
+      if(count === 3){
         countEl.classList.add("leftAnim");
         countEl.innerText = "3";
-    }
-    else if(count === 2){
+      }
+      else if(count === 2){
         countEl.classList.add("rightAnim");
         countEl.innerText = "2";
-    }
-    else if(count === 1){
+      }
+      else if(count === 1){
         countEl.classList.add("zoomAnim");
         countEl.innerText = "1";
-    }
-    else{
+      }
+      else{
         countEl.classList.add("goAnim");
         countEl.innerText = "GO!";
+      }
+
+      count--;
+
+      if(count >= -1){
+        setTimeout(showCount,700);
+      }else{
+        setTimeout(()=>{
+          hideIntroSteps();
+          document.getElementById("welcomeStep").classList.add("active");
+
+          // 15 sec game starts here
+          resetGame();
+          running = true;
+          detectVoice();
+          startTimer();
+
+        },700);
+      }
     }
 
-    count--;
+    showCount();
 
-    if(count >= -1){
-        setTimeout(showCount,700);
-    }else{
-        setTimeout(()=>{
-            hideIntroSteps();
-            document.getElementById("welcomeStep").classList.add("active");
-        },700);
+  }, 3600);
+}
+
+
+let audioContext, analyser, dataArray, micStream;
+let currentScore = 0;
+let targetScore = 0;
+let maxScore = 0;
+let timeLeft = 15;
+let displayScore = 0;
+let running = false;
+let timerInterval;
+let difficulty = "easy"; // easy / medium / hard
+
+const scoreEl = document.getElementById("score");
+const timerEl = document.getElementById("timer");
+const waterLayer = document.getElementById("waterLayer");
+const skyOverlay = document.querySelector(".skyOverlay");
+
+async function startGame(){
+    try{
+        if(!micStream){
+            micStream = await navigator.mediaDevices.getUserMedia({ audio:true });
+
+            audioContext = new AudioContext();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 512;
+            analyser.smoothingTimeConstant = .92;
+
+            const mic = audioContext.createMediaStreamSource(micStream);
+            mic.connect(analyser);
+
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+        }
+
+        
+        resetGame();
+        running = true;
+        detectVoice();
+        startTimer();
+
+    }catch(err){
+        alert("Please allow microphone permission.");
     }
 }
 
-  }, 3600);
+function resetGame(){
+    currentScore = 0;
+    targetScore = 0;
+    maxScore = 0;
+    timeLeft = 15;
+displayScore = 0;
+    scoreEl.innerText = "0";
+    scoreEl.classList.remove("finalZoom");
+    timerEl.innerText = "15s";
+  waterLayer.style.transition = "transform .18s linear";
+waterLayer.style.transform = "translateY(0px)";
+skyOverlay.style.transform = "none";
+    clearInterval(timerInterval);
+}
+
+function startTimer(){
+  clearInterval(timerInterval);
+
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    timerEl.innerText = timeLeft + "s";
+
+    if(timeLeft <= 0){
+      running = false;
+      clearInterval(timerInterval);
+
+      scoreEl.innerText = maxScore;
+
+      scoreEl.classList.remove("finalZoom");
+      void scoreEl.offsetWidth;
+      scoreEl.classList.add("finalZoom");
+
+      setTimeout(()=>{
+        closeGamePopup();
+      },1200);
+    }
+  },1000);
+}
+function getDifficultyLimit(){
+    if(currentScore < 30){
+        difficulty = "easy";
+        return 50;
+    }
+
+    if(currentScore < 50){
+        difficulty = "medium";
+        return 65;
+    }
+
+    difficulty = "hard";
+    return 100;
+}
+
+function detectVoice(){
+    if(!running) return;
+
+    analyser.getByteFrequencyData(dataArray);
+
+    let total = 0;
+    let highSound = 0;
+
+    for(let i = 0; i < dataArray.length; i++){
+        total += dataArray[i];
+
+        if(dataArray[i] > 95){
+            highSound++;
+        }
+    }
+
+    let volume = total / dataArray.length;
+
+    /* air / small noise ignore */
+    if(volume < 65 || highSound < 18){
+        targetScore = 0;
+    }else{
+        let limit = getDifficultyLimit();
+
+        let sensitivity = 1;
+
+        if(difficulty === "easy"){
+            sensitivity = 0.75;
+        }
+
+        if(difficulty === "medium"){
+            sensitivity = 0.52;
+        }
+
+        if(difficulty === "hard"){
+            sensitivity = 0.35;
+        }
+
+        targetScore = Math.floor((volume - 65) * sensitivity * 1.05);
+
+        if(targetScore < 0) targetScore = 0;
+        if(targetScore > limit) targetScore = limit;
+    }
+
+    if(targetScore > currentScore){
+        currentScore += (targetScore - currentScore) * 0.11;
+    }else{
+        currentScore += (targetScore - currentScore) * 0.08;
+    }
+
+    if(currentScore < 0) currentScore = 0;
+    if(currentScore > 100) currentScore = 100;
+
+   let showScore = Math.round(currentScore);
+
+if(displayScore < showScore){
+    displayScore++;
+}else if(displayScore > showScore){
+    displayScore--;
+}
+
+if(displayScore !== Number(scoreEl.innerText)){
+    scoreEl.classList.remove("scoreJump");
+    void scoreEl.offsetWidth;
+    scoreEl.classList.add("scoreJump");
+}
+
+scoreEl.innerText = displayScore;
+
+if(displayScore > maxScore){
+    maxScore = displayScore;
+}
+
+    let moveUp;
+
+    if(showScore >= 100){
+        moveUp = window.innerHeight;
+    }else{
+        moveUp = showScore * 4.2;
+    }
+
+    waterLayer.style.transform = `translateY(-${moveUp}px)`;
+
+    requestAnimationFrame(detectVoice);
 }
