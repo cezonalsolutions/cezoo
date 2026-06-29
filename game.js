@@ -128,6 +128,9 @@ async function startGameIntro(){
       mic.connect(analyser);
 
       dataArray = new Uint8Array(analyser.frequencyBinCount);
+      if(audioContext.state === "suspended"){
+  await audioContext.resume();
+}
     }
   }catch(err){
     alert("Please allow microphone permission.");
@@ -215,8 +218,13 @@ const skyOverlay = document.querySelector(".skyOverlay");
 async function startGame(){
     try{
         if(!micStream){
-            micStream = await navigator.mediaDevices.getUserMedia({ audio:true });
-
+          micStream = await navigator.mediaDevices.getUserMedia({
+  audio:{
+    echoCancellation:false,
+    noiseSuppression:false,
+    autoGainControl:true
+  }
+});
             audioContext = new AudioContext();
             analyser = audioContext.createAnalyser();
             analyser.fftSize = 512;
@@ -311,7 +319,7 @@ function detectVoice(){
     let volume = total / dataArray.length;
 
     /* air / small noise ignore */
-    if(volume < 65 || highSound < 18){
+    if(volume < 25 || highSound < 3){
         targetScore = 0;
     }else{
         let limit = getDifficultyLimit();
@@ -330,8 +338,7 @@ function detectVoice(){
             sensitivity = 0.35;
         }
 
-        targetScore = Math.floor((volume - 65) * sensitivity * 1.05);
-
+        targetScore = Math.floor((volume - 25) * sensitivity * 2.2);
         if(targetScore < 0) targetScore = 0;
         if(targetScore > limit) targetScore = limit;
     }
