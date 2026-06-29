@@ -21,15 +21,20 @@ function resetGameStart(){
 
 function openGamePopup(){
   document.getElementById("gamePopup").classList.add("show");
+
   document.body.style.overflow = "hidden";
+  document.documentElement.style.overflow = "hidden";
+  document.body.style.touchAction = "none";
 
   document.querySelector(".floatBarWrap")?.style.setProperty("display","none");
 
   clearInterval(timerInterval);
   running = false;
-const coupon = document.getElementById("couponResultScreen");
-coupon.style.display = "none";
-coupon.classList.remove("playArc");
+
+  const coupon = document.getElementById("couponResultScreen");
+  coupon.style.display = "none";
+  coupon.classList.remove("playArc");
+
   document.getElementById("gameIntroScreen").style.display = "none";
   hideIntroSteps();
 
@@ -38,14 +43,26 @@ coupon.classList.remove("playArc");
   gameTimer = setTimeout(() => {
     document.getElementById("splashScreen").style.display = "none";
     document.getElementById("mainScreen").style.display = "block";
-  }, 3000);
+  },3000);
 }
+
 function closeGamePopup(){
   document.getElementById("gamePopup").classList.remove("show");
+
   document.body.style.overflow = "";
-const coupon = document.getElementById("couponResultScreen");
-coupon.style.display = "none";
-coupon.classList.remove("playArc");
+  document.documentElement.style.overflow = "";
+  document.body.style.touchAction = "";
+
+  requestAnimationFrame(()=>{
+    document.body.style.overflow = "";
+    document.documentElement.style.overflow = "";
+    document.body.style.touchAction = "";
+  });
+
+  const coupon = document.getElementById("couponResultScreen");
+  coupon.style.display = "none";
+  coupon.classList.remove("playArc");
+
   document.querySelector(".floatBarWrap")?.style.removeProperty("display");
 
   clearTimeout(gameTimer);
@@ -62,8 +79,11 @@ coupon.classList.remove("playArc");
   resetGameStart();
 
   updateCartFloat();
-}
 
+  setTimeout(()=>{
+    window.scrollTo(window.scrollX, window.scrollY);
+  },50);
+}
 /* Swipe both sides close */
 let gameSwipeStartX = 0;
 let gameSwipeStartY = 0;
