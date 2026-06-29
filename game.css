@@ -314,3 +314,219 @@
 .playNowBtn:active{
     transform:scale(.98);
 }
+
+#gameIntroScreen{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:linear-gradient(180deg,#2cc6ff 0%,#56d9ff 45%,#9eeeff 100%);
+  z-index:999999;
+  overflow:hidden;
+}
+
+.introStep{
+  display:none;
+  position:absolute;
+  inset:0;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+}
+
+.introStep.active{
+  display:flex;
+}
+
+/* CLOCK */
+.bigAlarm{
+  width:76px;
+  height:76px;
+  border:12px solid #02051a;
+  border-radius:50%;
+  background:#fff;
+  position:relative;
+  box-sizing:border-box;
+  animation:clockRotate .7s infinite ease-in-out;
+}
+
+.bigAlarm::before,
+.bigAlarm::after{
+  content:"";
+  position:absolute;
+  top:-36px;
+  width:36px;
+  height:23px;
+  background:#02051a;
+  border-radius:50px 50px 8px 8px;
+}
+
+.bigAlarm::before{
+  left:-24px;
+  transform:rotate(-25deg);
+}
+
+.bigAlarm::after{
+  right:-24px;
+  transform:rotate(25deg);
+}
+
+/* fixed hand inside clock */
+.clockHand{
+  position:absolute;
+  width:7px;
+  height:24px;
+  background:#02051a;
+  border-radius:20px;
+  top:12px;
+  left:50%;
+  transform-origin:50% 100%;
+  animation:handSpin .75s linear infinite;
+}
+
+@keyframes clockRotate{
+  0%,100%{
+    transform:rotate(-7deg) scale(.95);
+  }
+  50%{
+    transform:rotate(7deg) scale(1);
+  }
+}
+
+@keyframes handSpin{
+  from{
+    transform:translateX(-50%) rotate(0deg);
+  }
+  to{
+    transform:translateX(-50%) rotate(360deg);
+  }
+}
+
+/* YOU HAVE */
+.youHaveText{
+  color:#fff;
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:3px;
+  margin-bottom:16px;
+}
+
+/* 15 SEC PILL */
+.timePill{
+  background:#02051a;
+  color:#fff;
+  border-radius:60px;
+  padding:14px 30px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  font-size:42px;
+  font-weight:900;
+}
+
+.pillClock{
+  width:50px;
+  height:50px;
+  background:#fff;
+  border-radius:50%;
+  position:relative;
+  overflow:hidden;
+}
+
+.pillHand{
+  position:absolute;
+  width:6px;
+  height:20px;
+  background:#02051a;
+  border-radius:20px;
+  top:8px;
+  left:50%;
+  transform-origin:50% 100%;
+  animation:handSpin .8s linear infinite;
+}
+
+/* COUNTDOWN */
+.screamText{
+  color:#fff;
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:3px;
+  margin-bottom:8px;
+}
+
+.countNumber{
+  color:#fff;
+  font-size:125px;
+  font-weight:900;
+  line-height:.9;
+}
+
+/* WELCOME */
+.welcomeText{
+  color:#fff;
+  font-size:26px;
+  font-weight:900;
+  letter-spacing:2px;
+  text-align:center;
+}
+@keyframes fromLeft{
+  from{
+    opacity:0;
+    transform:translateX(-220px) scale(.6);
+  }
+  to{
+    opacity:1;
+    transform:translateX(0) scale(1);
+  }
+}
+
+@keyframes fromRight{
+  from{
+    opacity:0;
+    transform:translateX(220px) scale(.6);
+  }
+  to{
+    opacity:1;
+    transform:translateX(0) scale(1);
+  }
+}
+
+@keyframes zoomNumber{
+  from{
+    opacity:0;
+    transform:scale(.2);
+  }
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+@keyframes goPop{
+  0%{
+    transform:scale(.2);
+    opacity:0;
+  }
+  60%{
+    transform:scale(1.25);
+  }
+  100%{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+.leftAnim{
+  animation:fromLeft .45s ease;
+}
+
+.rightAnim{
+  animation:fromRight .45s ease;
+}
+
+.zoomAnim{
+  animation:zoomNumber .45s ease;
+}
+
+.goAnim{
+  animation:goPop .45s ease;
+}
