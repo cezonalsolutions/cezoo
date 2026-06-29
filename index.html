@@ -6090,7 +6090,37 @@ button{
     <span class="tipText">Watch the full video once.</span>
 </div>
 </div>
-<button class="playNowBtn">PLAY NOW</button>
+<button class="playNowBtn" onclick="startGameIntro()">PLAY NOW</button>
+</div>
+
+<div id="gameIntroScreen">
+
+  <div class="introStep active" id="clockStep">
+    <div class="bigAlarm">
+      <div class="clockHand"></div>
+    </div>
+  </div>
+
+  <div class="introStep" id="timeStep">
+    <div class="youHaveText">YOU HAVE</div>
+
+    <div class="timePill">
+      <div class="pillClock">
+        <div class="pillHand"></div>
+      </div>
+      <span>15 s</span>
+    </div>
+  </div>
+
+  <div class="introStep" id="countStep">
+    <div class="screamText">SCREAM IN</div>
+    <div class="countNumber" id="countNumber">3</div>
+  </div>
+
+  <div class="introStep" id="welcomeStep">
+    <div class="welcomeText">WELCOME TO GAME</div>
+  </div>
+
 </div>
 
     </div>
