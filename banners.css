@@ -98,3 +98,103 @@
     from{background-position:200% 0;}
     to{background-position:-200% 0;}
 }
+
+
+
+.mallipudiSection{
+    width:100%;
+    padding:16px 12px;
+    background:#fff;
+    font-family:Arial,sans-serif;
+    overflow:hidden;
+}
+
+.mallipudiHeading{
+    font-size:18px;
+    font-weight:800;
+    color:#111;
+    margin-bottom:14px;
+    letter-spacing:-.2px;
+}
+
+.mallipudiGrid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px 10px;
+}
+
+.mallipudiItem{
+    min-width:0;
+}
+
+.mallipudiBig{
+    grid-column:span 2;
+    grid-row:span 2;
+}
+
+.mallipudiCard{
+    position:relative;
+    width:100%;
+    height:82px;
+    overflow:hidden;
+
+    border-radius:16px;
+    background:#eef3f7;
+}
+
+.mallipudiBig .mallipudiCard{
+    height:176px;
+}
+
+.mallipudiImg{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center bottom;
+
+    opacity:0;
+    transition:opacity .35s ease;
+
+    position:relative;
+    z-index:2;
+}
+
+.mallipudiImg.mallipudiLoaded{
+    opacity:1;
+}
+
+.mallipudiShimmer{
+    position:absolute;
+    inset:0;
+    z-index:1;
+
+    background:linear-gradient(
+        90deg,
+        #eef1f5 0%,
+        #f9fafb 50%,
+        #eef1f5 100%
+    );
+
+    background-size:200% 100%;
+    animation:mallipudiShimmerMove 1.1s linear infinite;
+}
+
+.mallipudiCard.mallipudiImageLoaded .mallipudiShimmer{
+    display:none;
+}
+
+.mallipudiText{
+    margin-top:6px;
+    text-align:center;
+
+    font-size:11px;
+    font-weight:700;
+    color:#111;
+
+    line-height:1.2;
+}
+
+@keyframes mallipudiShimmerMove{
+    from{background-position:200% 0;}
+    to{background-position:-200% 0;}
+}
