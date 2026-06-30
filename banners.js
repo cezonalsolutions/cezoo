@@ -117,3 +117,32 @@ const kovvurObserver = new IntersectionObserver((entries)=>{
 kovvurImages.forEach(img=>{
     kovvurObserver.observe(img);
 });
+
+const tanukuImages = document.querySelectorAll(".tanukuImg");
+
+const tanukuObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+        if(entry.isIntersecting){
+            const img = entry.target;
+
+            if(!img.src){
+                img.src = img.dataset.src;
+            }
+
+            img.onload = ()=>{
+                img.classList.add("tanukuLoaded");
+                img.closest(".tanukuCard")
+                   .classList.add("tanukuImageLoaded");
+            };
+
+            tanukuObserver.unobserve(img);
+        }
+    });
+},{
+    threshold:0.1,
+    rootMargin:"160px"
+});
+
+tanukuImages.forEach(img=>{
+    tanukuObserver.observe(img);
+});
