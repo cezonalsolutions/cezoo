@@ -168,3 +168,43 @@ const giftTypeObserver = new IntersectionObserver((entries)=>{
 document.querySelectorAll(".giftTypeImg").forEach(img=>{
     giftTypeObserver.observe(img);
 });
+
+const giftBannerTrack = document.getElementById("giftBannerTrack");
+const giftBannerDots = document.querySelectorAll(".giftBannerDot");
+const giftBannerImages = document.querySelectorAll(".giftBannerImg");
+
+giftBannerTrack.addEventListener("scroll", ()=>{
+  const index = Math.round(
+    giftBannerTrack.scrollLeft / giftBannerTrack.clientWidth
+  );
+
+  giftBannerDots.forEach(dot => dot.classList.remove("active"));
+  giftBannerDots[index]?.classList.add("active");
+});
+
+const giftBannerObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(!entry.isIntersecting) return;
+
+    const img = entry.target;
+
+    if(!img.src){
+      img.src = img.dataset.src;
+    }
+
+    img.onload = ()=>{
+      img.classList.add("giftBannerLoaded");
+      img.closest(".giftBannerSlide")
+         .classList.add("giftBannerImageLoaded");
+    };
+
+    giftBannerObserver.unobserve(img);
+  });
+},{
+  threshold:0.15,
+  rootMargin:"160px"
+});
+
+giftBannerImages.forEach(img=>{
+  giftBannerObserver.observe(img);
+});
