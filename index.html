@@ -1365,8 +1365,10 @@ position:relative;
 .gift-bg{
   position:relative;
   background:#ffe8d6;
-  padding:12px 16px;
+  padding:0 16px 9px;   /* top right/left bottom */
   overflow:hidden;
+
+  margin-top:-1px;     /* adjust: -8px, -12px, -16px as needed */
 }
 
 .gift-bg::after{
@@ -4744,6 +4746,12 @@ button{
 .tipSection.active{
   display:block;
 }
+.giftBannerWrap{
+    width:100%;
+    background:#ffe8d6;
+    padding:2px;
+    border-radius:18px;
+}
 
 /* DELIVERY INSTRUCTIONS */
 
@@ -6075,12 +6083,56 @@ button{
 
   </div>
 
- <div class="content-section gift-bg" data-section="Gift">
+ <div class="content-section " data-section="Gift">
 
+ <div class="gift-bg">
   <div class="gift-banner-single">
     <img src="banners/gifts.png" alt="Gift Banner">
   </div>
+</div>
 
+<section class="tanukuSection" id="tanukuSection">
+
+  <h2 class="tanukuHeading" id="tanukuHeading">Featured Categories</h2>
+
+  <div class="tanukuGrid" id="tanukuGrid">
+
+    <div class="tanukuItem" id="tanukuCardOne">
+      <div class="tanukuCard">
+        <div class="tanukuShimmer"></div>
+        <img data-src="gift/idol.webp" class="tanukuImg" alt="Category One">
+      </div>
+      <p class="tanukuText">Idols</p>
+    </div>
+
+    <div class="tanukuItem" id="tanukuCardTwo">
+      <div class="tanukuCard">
+        <div class="tanukuShimmer"></div>
+        <img data-src="gift/photo.jpeg" class="tanukuImg" alt="Category Two">
+      </div>
+      <p class="tanukuText">Photo Frames</p>
+    </div>
+
+    <div class="tanukuItem" id="tanukuCardThree">
+      <div class="tanukuCard">
+        <div class="tanukuShimmer"></div>
+        <img data-src="gift/tedybear.jpeg" class="tanukuImg" alt="Category Three">
+      </div>
+      <p class="tanukuText">Teddy Bears</p>
+    </div>
+
+    <div class="tanukuItem" id="tanukuCardFour">
+      <div class="tanukuCard">
+        <div class="tanukuShimmer"></div>
+        <img data-src="gift/toys.avif" class="tanukuImg" alt="Category Four">
+      </div>
+      <p class="tanukuText">Toys</p>
+    </div>
+
+  </div>
+</section>
+
+  
 </div>
 
 
