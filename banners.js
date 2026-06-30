@@ -88,3 +88,32 @@ const rajupalemObserver = new IntersectionObserver((entries)=>{
 rajupalemImages.forEach(img=>{
     rajupalemObserver.observe(img);
 });
+
+const kovvurImages = document.querySelectorAll(".kovvurImg");
+
+const kovvurObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+        if(entry.isIntersecting){
+            const img = entry.target;
+
+            if(!img.src){
+                img.src = img.dataset.src;
+            }
+
+            img.onload = ()=>{
+                img.classList.add("kovvurLoaded");
+                img.closest(".kovvurCard")
+                   .classList.add("kovvurImageLoaded");
+            };
+
+            kovvurObserver.unobserve(img);
+        }
+    });
+},{
+    threshold:0.1,
+    rootMargin:"160px"
+});
+
+kovvurImages.forEach(img=>{
+    kovvurObserver.observe(img);
+});
