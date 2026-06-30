@@ -57,3 +57,34 @@ const mallipudiObserver = new IntersectionObserver((entries)=>{
 mallipudiImages.forEach(img=>{
     mallipudiObserver.observe(img);
 });
+
+
+const rajupalemImages = document.querySelectorAll(".rajupalemImg");
+
+const rajupalemObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+        if(entry.isIntersecting){
+            const img = entry.target;
+
+            if(!img.src){
+                img.src = img.dataset.src;
+            }
+
+            img.onload = ()=>{
+                img.classList.add("rajupalemLoaded");
+                img.closest(".rajupalemCard")
+                   .classList.add("rajupalemImageLoaded");
+            };
+
+            rajupalemObserver.unobserve(img);
+        }
+    });
+},{
+    root:null,
+    threshold:0.1,
+    rootMargin:"150px"
+});
+
+rajupalemImages.forEach(img=>{
+    rajupalemObserver.observe(img);
+});
