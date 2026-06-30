@@ -145,18 +145,39 @@
 .mallipudiBig .mallipudiCard{
     height:176px;
 }
+#mallipudiSkincare .mallipudiImg{
+    width:100% !important;
+    height:100% !important;
 
+    position:absolute !important;
+    inset:0 !important;
+
+    transform:none !important;
+
+    object-fit:cover !important;
+    object-position:center !important;
+}
 .mallipudiImg{
-    width:100%;
-    height:100%;
-    object-fit:cover;
+    width:82%;
+    height:82%;
+
+    position:absolute;
+    left:50%;
+    bottom:6px;
+    transform:translateX(-50%);
+
+    object-fit:contain;
     object-position:center bottom;
 
     opacity:0;
     transition:opacity .35s ease;
-
-    position:relative;
     z-index:2;
+}
+
+.mallipudiBig .mallipudiImg{
+    width:78%;
+    height:78%;
+    bottom:10px;
 }
 
 .mallipudiImg.mallipudiLoaded{
