@@ -414,3 +414,92 @@
     from{background-position:200% 0;}
     to{background-position:-200% 0;}
 }
+
+.tanukuSection{
+    width:100%;
+    padding:14px 12px 20px;
+    background:#fff;
+    font-family:Arial,sans-serif;
+    overflow:hidden;
+}
+
+.tanukuHeading{
+    font-size:17px;
+    font-weight:800;
+    color:#222;
+    margin:0 0 12px;
+}
+
+.tanukuGrid{
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:14px 12px;
+}
+
+.tanukuItem{
+    min-width:0;
+}
+
+.tanukuCard{
+    position:relative;
+    width:100%;
+    height:120px;
+    overflow:hidden;
+
+    border-radius:18px;
+    background:#f3f3f3;
+}
+
+.tanukuImg{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+    object-position:center;
+
+    opacity:0;
+    transition:opacity .35s ease;
+    z-index:2;
+}
+
+.tanukuImg.tanukuLoaded{
+    opacity:1;
+}
+
+.tanukuShimmer{
+    position:absolute;
+    inset:0;
+    z-index:1;
+
+    background:linear-gradient(
+        90deg,
+        #eeeeee 0%,
+        #fafafa 50%,
+        #eeeeee 100%
+    );
+
+    background-size:200% 100%;
+    animation:tanukuShimmerMove 1.1s linear infinite;
+}
+
+.tanukuCard.tanukuImageLoaded .tanukuShimmer{
+    display:none;
+}
+
+.tanukuText{
+    margin-top:7px;
+    text-align:center;
+
+    font-size:12px;
+    font-weight:700;
+    color:#222;
+    line-height:1.2;
+}
+@keyframes tanukuShimmerMove{
+    from{background-position:200% 0;}
+    to{background-position:-200% 0;}
+}
