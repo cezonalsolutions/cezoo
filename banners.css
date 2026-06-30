@@ -533,7 +533,7 @@
 .scissorIcon.right{
   transform:rotate(20deg) scaleX(-1);
 }
-.sectionTitle{
+.sectionTitless{
     width:100%;
     display:flex;
     align-items:center;
@@ -750,4 +750,65 @@
 @keyframes giftBannerShimmerMove{
   from{background-position:200% 0;}
   to{background-position:-200% 0;}
+}
+
+.budgetSection{
+    width:100%;
+    padding:16px 14px;
+    background:#fff;
+}
+
+.budgetHeading{
+    font-size:18px;
+    font-weight:700;
+    color:#222;
+    margin-bottom:14px;
+}
+
+.budgetScroll{
+    display:flex;
+    gap:12px;
+
+    overflow-x:auto;
+    overflow-y:hidden;
+
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+
+    padding-bottom:4px;
+}
+
+.budgetScroll::-webkit-scrollbar{
+    display:none;
+}
+
+.budgetCard{
+    flex:0 0 105px;
+    width:105px;
+    height:76px;
+
+    border-radius:18px;
+    background:linear-gradient(135deg,#fff6e8,#ffe8c2);
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    border:1px solid #ffd58d;
+}
+
+.budgetCard span{
+    font-size:18px;
+    font-weight:700;
+    color:#555;
+    line-height:1;
+}
+
+.budgetCard strong{
+    margin-top:2px;
+    font-size:18px;
+    font-weight:700;
+    color:#111;
+    line-height:1;
 }
