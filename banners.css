@@ -503,3 +503,152 @@
     from{background-position:200% 0;}
     to{background-position:-200% 0;}
 }
+
+
+.gameTopHeading{
+  position:absolute;
+  top:28px;
+  left:0;
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  z-index:50;
+}
+
+.headingText{
+  font-family:'Poppins',sans-serif;
+  font-size:20px;
+  font-weight:900;
+  color:#111;
+  letter-spacing:.5px;
+}
+
+.scissorIcon{
+  font-size:24px;
+  transform:rotate(-20deg);
+}
+
+.scissorIcon.right{
+  transform:rotate(20deg) scaleX(-1);
+}
+.sectionTitle{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    margin:18px 0;
+}
+
+.titleText{
+    font-family:'Poppins',sans-serif;
+    font-size:16px;
+    font-weight:700;
+    color:#222;
+    letter-spacing:.4px;
+}
+
+.titleScissor{
+    font-size:18px;
+    transform:rotate(-18deg);
+    user-select:none;
+}
+
+.titleScissor.right{
+    transform:rotate(18deg) scaleX(-1);
+}
+
+.giftTypeScroll{
+    display:flex;
+    align-items:flex-start;
+    gap:16px;
+
+    margin-top:14px;
+    padding:0 16px 6px;
+
+    overflow-x:auto;
+    overflow-y:hidden;
+
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+
+    justify-content:flex-start;
+}
+
+.giftTypeScroll::-webkit-scrollbar{
+    display:none;
+}
+
+.giftTypeItem{
+    flex:0 0 70px;
+    width:70px;
+    text-align:center;
+}
+
+
+
+.giftTypeImg.giftTypeLoaded{
+    opacity:1;
+}
+
+.giftTypeImgBox{
+    position:relative;
+    width:64px;
+    height:64px;
+    margin:0 auto;
+
+    border-radius:14px;
+    overflow:hidden;
+}
+
+.giftTypeImg{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+
+    border-radius:14px;
+
+    opacity:0;
+    transition:opacity .35s ease;
+
+    position:relative;
+    z-index:2;
+}
+
+.giftTypeShimmer{
+    position:absolute;
+    inset:0;
+
+    border-radius:14px;
+
+    background:linear-gradient(
+        90deg,
+        #f2f2f2 0%,
+        #ffffff 50%,
+        #f2f2f2 100%
+    );
+
+    background-size:200% 100%;
+    animation:giftTypeShimmerMove 1.1s linear infinite;
+}
+
+.giftTypeImgBox.giftTypeImageLoaded .giftTypeShimmer{
+    display:none;
+}
+
+.giftTypeItem p{
+    margin-top:6px;
+
+    font-size:11px;
+    font-weight:600;
+    color:#333;
+    line-height:1.15;
+}
+
+@keyframes giftTypeShimmerMove{
+    from{background-position:200% 0;}
+    to{background-position:-200% 0;}
+}
