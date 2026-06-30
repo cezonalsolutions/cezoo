@@ -146,3 +146,25 @@ const tanukuObserver = new IntersectionObserver((entries)=>{
 tanukuImages.forEach(img=>{
     tanukuObserver.observe(img);
 });
+
+const giftTypeObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+        if(!entry.isIntersecting) return;
+
+        const img = entry.target;
+        img.src = img.dataset.src;
+
+        img.onload = ()=>{
+            img.classList.add("giftTypeLoaded");
+            img.parentElement.classList.add("giftTypeImageLoaded");
+        };
+
+        giftTypeObserver.unobserve(img);
+    });
+},{
+    threshold:0.15
+});
+
+document.querySelectorAll(".giftTypeImg").forEach(img=>{
+    giftTypeObserver.observe(img);
+});
