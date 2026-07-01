@@ -263,9 +263,9 @@ ${deliveryPartnerTip > 0 ? `
           Help them earn a little extra for their effort. 100% of this tip will go to them.
         </div>
 
-        <div class="tipSafety">
-          Delivery Partner Safety
-        </div>
+      <div class="tipSafety" onclick="openDeliverySafety()">
+  Delivery Partner Safety
+</div>
 
       </div>
 
@@ -492,4 +492,135 @@ function toggleInstruction(btn, text){
   }else{
     selectedInstructions.push(text);
   }
+}
+
+/* DELIVERY SAFETY BOTTOM SHEET - JS ONLY */
+function createDeliverySafetySheet(){
+  if(document.getElementById("deliverySafetySheet")) return;
+
+  const style = document.createElement("style");
+  style.innerHTML = `
+    .deliverysafety{
+      position:fixed;
+      inset:0;
+      z-index:999999999;
+      display:none;
+    }
+
+    .deliverysafety.show{
+      display:block;
+    }
+
+    .deliverysafetyOverlay{
+      position:absolute;
+      inset:0;
+      background:rgba(0,0,0,.45);
+    }
+
+    .deliverysafetyClose{
+    position:fixed;
+
+    left:50%;
+    bottom:330px;   /* Adjust this value if your sheet height changes */
+
+    transform:translateX(-50%);
+
+    width:36px;
+    height:36px;
+
+    border:none;
+    border-radius:50%;
+
+    background:#fff;
+    color:#333;
+
+    font-size:18px;
+    font-weight:600;
+    line-height:36px;
+    text-align:center;
+
+    box-shadow:0 4px 14px rgba(0,0,0,.18);
+
+    cursor:pointer;
+    z-index:99999999;
+}
+
+    .deliverysafetyBox{
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:0;
+      background:#fff;
+      border-radius:26px 26px 0 0;
+      padding:28px 20px 30px;
+      text-align:center;
+      z-index:2;
+    }
+
+    .deliverysafetyImg{
+    width:54px;
+    height:54px;
+    object-fit:contain;
+    display:block;
+    margin:0 auto 10px;
+}
+    .deliverysafetyBox h3{
+    margin:0 0 12px;
+    font-size:17px;
+    font-weight:700;
+    color:#222;
+}
+    .deliverysafetyPoints{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.deliverysafetyPoints p{
+    margin:0;
+    padding:10px 12px;
+
+    background:#f7f7f7;
+    border-radius:10px;
+
+    font-size:13px;
+    font-weight:500;
+    line-height:1.4;
+    color:#555;
+}
+  `;
+  document.head.appendChild(style);
+
+  document.body.insertAdjacentHTML("beforeend", `
+    <div id="deliverySafetySheet" class="deliverysafety">
+      <div class="deliverysafetyOverlay" onclick="closeDeliverySafety()"></div>
+
+      <button class="deliverysafetyClose" onclick="closeDeliverySafety()">×</button>
+
+      <div class="deliverysafetyBox">
+        <img src="tip.png" class="deliverysafetyImg" alt="">
+
+        <h3>Delivery Partner Safety</h3>
+
+        <div class="deliverysafetyPoints">
+          <p>Delivery partner follows safe delivery guidelines.</p>
+          <p>Your tip goes directly to the delivery partner.</p>
+          <p>Contactless delivery is available when requested.</p>
+          <p>Delivery instructions help complete the order safely.</p>
+        </div>
+      </div>
+    </div>
+  `);
+}
+
+function openDeliverySafety(){
+  createDeliverySafetySheet();
+
+  const sheet = document.getElementById("deliverySafetySheet");
+  document.body.appendChild(sheet);
+  sheet.classList.add("show");
+}
+
+function closeDeliverySafety(){
+  document.getElementById("deliverySafetySheet")?.classList.remove("show");
 }
